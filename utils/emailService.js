@@ -9,38 +9,27 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER || '9c8357001@smtp-brevo.com',
     pass: process.env.EMAIL_PASS || 'arthur2003',
   },
-  connectionTimeout: 10000,
-  socketTimeout: 10000,
+  // Removendo connectionTimeout e socketTimeout para usar os padrões do Nodemailer
 });
 
-// Função para enviar e-mail com timeout
+// Função para enviar e-mail
 const sendEmail = async (to, subject, htmlContent, textContent = '') => {
-  return new Promise((resolve, reject) => {
-    // Timeout de 8 segundos
-    const timeout = setTimeout(() => {
-      reject(new Error('Timeout ao enviar e-mail (8s)'));
-    }, 8000);
+  const mailOptions = {
+    from: process.env.EMAIL_FROM || 'Card YXS <noreply@yxs-site.onrender.com>',
+    to: to,
+    subject: subject,
+    html: htmlContent,
+    text: textContent || htmlContent.replace(/<[^>]*>/g, ''),
+  };
 
-    const mailOptions = {
-      from: process.env.EMAIL_FROM || 'Card YXS <noreply@yxs-site.onrender.com>',
-      to: to,
-      subject: subject,
-      html: htmlContent,
-      text: textContent || htmlContent.replace(/<[^>]*>/g, ''),
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      clearTimeout(timeout);
-      
-      if (error) {
-        console.error('✗ Erro ao enviar e-mail:', error.message);
-        reject(new Error(`Falha no envio do e-mail: ${error.message}`));
-      } else {
-        console.log('✓ E-mail enviado com sucesso:', info.response);
-        resolve(info);
-      }
-    });
-  });
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('✓ E-mail enviado com sucesso:', info.response);
+    return info;
+  } catch (error) {
+    console.error('✗ Erro ao enviar e-mail:', error.message);
+    throw new Error(`Falha no envio do e-mail: ${error.message}`);
+  }
 };
 
 // Função para enviar e-mail de recuperação de senha
