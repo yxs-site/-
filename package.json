@@ -1,0 +1,27 @@
+{
+  "name": "card-yxs",
+  "version": "1.0.0",
+  "description": "Site do Card YXS com registro e persistência de dados em JSON",
+  "main": "server/index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "keywords": [
+    "card",
+    "game",
+    "yxs",
+    "termux"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "lowdb": "^7.0.1",
+    "nodemailer": "^7.0.10"
+  }
+}
