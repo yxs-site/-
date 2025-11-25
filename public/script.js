@@ -124,6 +124,12 @@ function logout() {
   currentUser = null;
   
   // Redirecionar para a tela de login
+  // Garantir que o botão de login seja reativado
+  const loginSubmitButton = loginForm.querySelector("button[type=\"submit\"]");
+  if (loginSubmitButton) {
+    loginSubmitButton.disabled = false;
+    loginSubmitButton.textContent = "Entrar";
+  }
   // O welcomeScreen é a tela principal, que contém o menu.
   // O loginScreen é a tela de autenticação.
   switchScreen(welcomeScreen, loginScreen);
@@ -512,7 +518,7 @@ loginForm.addEventListener("submit", async (e) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: loginIdentifier, // O backend aceita email como identificador
+        identifier: loginIdentifier, // O backend aceita email ou username como identificador
         password: loginPassword,
       }),
     });
@@ -697,4 +703,4 @@ function showError(element, message) {
   setTimeout(() => {
     element.classList.remove("show");
   }, 5000);
-}
+      }
