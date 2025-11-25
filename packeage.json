@@ -1,0 +1,29 @@
+{
+  "name": "card-yxs",
+  "version": "1.0.0",
+  "description": "Site completo do jogo Card YXS com sistema de registro de usuários, banco de dados e envio automático de e-mail de boas-vindas.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yxs-site/-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yxs-site/-/issues"
+  },
+  "homepage": "https://github.com/yxs-site/-#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.4",
+    "nodemailer": "^6.9.14"
+  }
+}
