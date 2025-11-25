@@ -23,8 +23,8 @@ const UserSchema = new mongoose.Schema({
         default: '' // URL da foto de perfil
     },
     // Campo para recuperação de senha
-    resetPasswordToken: String,
-    resetPasswordExpires: Date
+    resetToken: String,
+    resetTokenExpiry: Date
 }, {
     timestamps: true // Adiciona createdAt e updatedAt
 });
