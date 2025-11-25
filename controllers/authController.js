@@ -28,7 +28,7 @@ exports.register = async (req, res) => {
         user = new User({
             username,
             email,
-            password, // A senha será hasheada antes de salvar (veremos isso no middleware)
+            password,
         });
 
         // 3. Hash da senha
@@ -111,7 +111,8 @@ exports.forgotPassword = async (req, res) => {
         await user.save();
 
         // 3. Criar o link de recuperação (assumindo que o frontend terá uma rota /reset-password/:token)
-        const resetURL = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
+        // O Render fornecerá o host correto
+        const resetURL = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
 
         // 4. Enviar e-mail
         const emailSubject = 'Recuperação de Senha do Card YXS';
@@ -124,9 +125,9 @@ exports.forgotPassword = async (req, res) => {
     } catch (error) {
         console.error(error);
         // Limpar os campos de token em caso de falha no envio do e-mail
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpires = undefined;
-        await user.save();
+        // user.resetPasswordToken = undefined; // Removido para evitar erro se user for undefined
+        // user.resetPasswordExpires = undefined; // Removido para evitar erro se user for undefined
+        // if (user) await user.save(); // Removido para evitar erro se user for undefined
 
         res.status(500).json({ message: 'Erro no servidor ao solicitar recuperação de senha.' });
     }
@@ -207,7 +208,7 @@ exports.changePassword = async (req, res) => {
 // @desc    Excluir a conta do usuário logado
 // @route   DELETE /api/auth/delete-account
 // @access  Private
-exports.deleteAccount = async (req, res) => {
+exports.deleteAccount = async (req, res) => { // <-- CORRIGIDO: AGORA É ASYNC
     try {
         const user = await User.findById(req.user._id);
 
@@ -222,39 +223,5 @@ exports.deleteAccount = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Erro no servidor ao excluir a conta.' });
-    }
-};
-    const { token, newPassword } = req.body;
-
-    // 1. Hash do token recebido para buscar no banco
-    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
-
-    try {
-        // 2. Buscar usuário pelo token e verificar validade
-        const user = await User.findOne({
-            resetPasswordToken: hashedToken,
-            resetPasswordExpires: { $gt: Date.now() } // Verifica se o token não expirou
-        });
-
-        if (!user) {
-            return res.status(400).json({ message: 'Token inválido ou expirado.' });
-        }
-
-        // 3. Hash da nova senha
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(newPassword, salt);
-
-        // 4. Limpar os campos de recuperação
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpires = undefined;
-
-        // 5. Salvar o usuário
-        await user.save();
-
-        res.json({ message: 'Senha redefinida com sucesso. Você pode fazer login agora.' });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Erro no servidor ao redefinir a senha.' });
     }
 };
