@@ -1,22 +1,16 @@
 const nodemailer = require('nodemailer');
 
-// Configurar transportador com SendGrid
+// Configurar transportador com Brevo
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'smtp.sendgrid.net',
+  host: process.env.EMAIL_HOST || 'smtp-relay.brevo.com',
   port: parseInt(process.env.EMAIL_PORT) || 587,
   secure: false,
   auth: {
-    user: process.env.EMAIL_USER || 'apikey',
-    pass: process.env.EMAIL_PASS || '',
+    user: process.env.EMAIL_USER || '9c8357001@smtp-brevo.com',
+    pass: process.env.EMAIL_PASS || 'arthur2003',
   },
-  connectionTimeout: 10000, // 10 segundos
-  socketTimeout: 10000,     // 10 segundos
-  pool: {
-    maxConnections: 5,
-    maxMessages: 100,
-    rateDelta: 1000,
-    rateLimit: 5
-  }
+  connectionTimeout: 10000,
+  socketTimeout: 10000,
 });
 
 // Função para enviar e-mail com timeout
