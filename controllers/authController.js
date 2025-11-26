@@ -8,6 +8,7 @@ const { sendPasswordResetEmail, sendWelcomeEmail, sendResetConfirmationEmail } =
 exports.register = async (req, res) => {
   try {
     const { username, email, password, confirmPassword } = req.body;
+    console.log(`[REGISTRO] Tentativa de registro: ${email} / ${username}`);
 
     // Validar campos obrigatórios
     if (!username || !email || !password || !confirmPassword) {
@@ -45,7 +46,7 @@ exports.register = async (req, res) => {
     });
 
     await newUser.save();
-    console.log('✓ Usuário registrado:', email);
+    console.log(`[REGISTRO] Usuário salvo com sucesso: ${newUser.email}`);
 
     // Enviar e-mail de boas-vindas em background (não bloqueia a resposta)
     sendWelcomeEmail(newUser).catch(err => {
@@ -239,7 +240,7 @@ exports.resetPassword = async (req, res) => {
 // Obter dados do usuário
 exports.getUser = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user._id; // CORREÇÃO: O middleware anexa o objeto User completo
 
     const user = await User.findById(userId).select('-password -resetToken -resetTokenExpiry');
 
@@ -257,7 +258,7 @@ exports.getUser = async (req, res) => {
 // Atualizar perfil do usuário
 exports.updateProfile = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user._id; // CORREÇÃO: O middleware anexa o objeto User completo
     const { name, profilePicture } = req.body;
 
     const user = await User.findByIdAndUpdate(
@@ -282,7 +283,8 @@ exports.updateProfile = async (req, res) => {
 // Alterar senha
 exports.changePassword = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user._id; // CORREÇÃO: O middleware anexa o objeto User completo
+    console.log(`[ALTERAR SENHA] Tentativa de alteração de senha para userId: ${userId}`);
     const { currentPassword, newPassword, confirmPassword } = req.body;
 
     // Validar campos obrigatórios
@@ -308,9 +310,11 @@ exports.changePassword = async (req, res) => {
     }
 
     // Verificar senha atual
+    console.log(`[ALTERAR SENHA] Verificando senha atual para userId: ${userId}`);
     const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
 
     if (!isPasswordValid) {
+      console.log(`[ALTERAR SENHA] Falha: Senha atual incorreta para userId: ${userId}`);
       return res.status(401).json({ error: 'Senha atual incorreta' });
     }
 
@@ -318,8 +322,10 @@ exports.changePassword = async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     // Atualizar senha
+    console.log(`[ALTERAR SENHA] Senha hasheada com sucesso para userId: ${userId}`);
     user.password = hashedPassword;
     await user.save();
+    console.log(`[ALTERAR SENHA] Senha salva no DB para userId: ${userId}`);
 
     console.log('✓ Senha alterada para:', userId);
 
@@ -333,7 +339,7 @@ exports.changePassword = async (req, res) => {
 // Excluir conta
 exports.deleteAccount = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user._id; // CORREÇÃO: O middleware anexa o objeto User completo
     const { password } = req.body;
 
     // Validar campo obrigatório
@@ -367,4 +373,4 @@ exports.deleteAccount = async (req, res) => {
   }
 };
 
-    
+                         
