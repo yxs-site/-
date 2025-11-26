@@ -15,9 +15,10 @@ const protect = async (req, res, next) => {
 
             // Verificar o token
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            console.log('Token decodificado:', decoded); // Log de diagnóstico
 
             // Anexar o usuário ao objeto de requisição (sem a senha)
-            req.user = await User.findById(decoded.id).select('-password');
+            req.user = await User.findById(decoded.userId).select('-password'); // CORREÇÃO: Usar decoded.userId
 
             next();
         } catch (error) {
