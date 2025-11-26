@@ -68,8 +68,8 @@ exports.sendPasswordResetEmail = async (user, resetURL) => {
                 <p style="font-size: 16px;">Olá ${user.username},</p>
                 <p style="font-size: 16px;">Recebemos uma solicitação para redefinir a senha da sua conta Card YXS.</p>
                 
-                <!-- Botão CTA -->
-                <a href="${resetURL}" style="display: inline-block; background-color: #28a745; color: #ffffff; text-decoration: none; padding: 12px 25px; margin: 25px 0; border-radius: 5px; font-weight: bold; font-size: 16px;">
+                <!-- Botão CTA (AGORA ROXO)-->
+                <a href="${resetURL}" style="display: inline-block; background-color: #8A2BE2; color: #ffffff; text-decoration: none; padding: 12px 25px; margin: 25px 0; border-radius: 5px; font-weight: bold; font-size: 16px;">
                     REDEFINIR MINHA SENHA
                 </a>
                 
