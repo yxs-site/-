@@ -58,14 +58,14 @@ exports.sendPasswordResetEmail = async (user, resetURL) => {
     const message = `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
             <!-- Header -->
-            <div style="background-color: #007bff; color: #ffffff; padding: 20px; text-align: center;">
-                <h1 style="margin: 0; font-size: 24px;">Card YXS</h1>
+            <div style="background-color: #007bff; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #28a745;">
+                <h1 style="margin: 0; font-size: 24px; font-weight: bold;">Card YXS</h1>
             </div>
             
             <!-- Body -->
             <div style="padding: 30px; text-align: center;">
                 <h2 style="color: #007bff; margin-top: 0;">Redefinição de Senha</h2>
-                <p style="font-size: 16px;">Olá **${user.username}**,</p>
+                <p style="font-size: 16px;">Olá ${user.username},</p>
                 <p style="font-size: 16px;">Recebemos uma solicitação para redefinir a senha da sua conta Card YXS.</p>
                 
                 <!-- Botão CTA -->
@@ -73,7 +73,7 @@ exports.sendPasswordResetEmail = async (user, resetURL) => {
                     REDEFINIR MINHA SENHA
                 </a>
                 
-                <p style="font-size: 14px; color: #777;">Este link é válido por apenas **1 hora**.</p>
+                <p style="font-size: 14px; color: #777;">Este link é válido por apenas 1 hora.</p>
                 <p style="font-size: 14px; color: #777;">Se você não solicitou esta redefinição, por favor, ignore este e-mail. Sua senha atual permanecerá inalterada.</p>
             </div>
             
@@ -116,11 +116,32 @@ exports.sendResetConfirmationEmail = async (user) => {
 exports.sendWelcomeEmail = async (user) => {
     const subject = 'Bem-vindo(a) ao Card YXS!';
     const message = `
-        Olá ${user.username},
-        
-        Sua conta foi criada com sucesso. Bem-vindo(a) à comunidade Card YXS!
-        
-        Se precisar de ajuda, não hesite em nos contatar.
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+            <!-- Header (Roxo) -->
+            <div style="background-color: #8A2BE2; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #28a745;">
+                <h1 style="margin: 0; font-size: 24px; font-weight: bold;">Card YXS</h1>
+            </div>
+            
+            <!-- Body -->
+            <div style="padding: 30px; text-align: center;">
+                <h2 style="color: #28a745; margin-top: 0;">Sua conta foi criada com sucesso!</h2>
+                <p style="font-size: 16px;">Olá ${user.username},</p>
+                <p style="font-size: 16px;">É um prazer tê-lo(a) na comunidade Card YXS. Sua jornada conosco começa agora!</p>
+                
+                <!-- Botão CTA (Verde) -->
+                <a href="https://yxs-site.onrender.com/login" style="display: inline-block; background-color: #28a745; color: #ffffff; text-decoration: none; padding: 12px 25px; margin: 25px 0; border-radius: 5px; font-weight: bold; font-size: 16px;">
+                    ACESSAR MINHA CONTA
+                </a>
+                
+                <p style="font-size: 14px; color: #777;">Se precisar de qualquer ajuda ou tiver dúvidas, nossa equipe de suporte está à disposição.</p>
+            </div>
+            
+            <!-- Footer -->
+            <div style="background-color: #f4f4f4; color: #999; padding: 15px; text-align: center; font-size: 12px;">
+                <p style="margin: 0;">Atenciosamente,</p>
+                <p style="margin: 0;">A Equipe Card YXS</p>
+            </div>
+        </div>
     `;
 
     await exports.sendEmail({
