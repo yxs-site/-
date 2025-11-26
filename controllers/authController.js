@@ -163,7 +163,7 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
 
     // Construir link de reset
-    const resetLink = `https://yxs-site.onrender.com/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`;
+    const resetLink = `https://yxs-site.onrender.com/#/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`;
 
     console.log('✓ Token de reset gerado para:', email);
 
@@ -378,6 +378,3 @@ exports.deleteAccount = async (req, res) => {
     res.status(500).json({ error: 'Erro ao excluir conta' });
   }
 };
-
-
-       
