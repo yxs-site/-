@@ -69,7 +69,8 @@ exports.register = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('✗ Erro ao registrar usuário:', error.message);
+    // CORREÇÃO: Loga o objeto de erro completo para diagnóstico
+    console.error('✗ Erro ao registrar usuário:', error);
     res.status(500).json({ error: 'Erro ao registrar usuário' });
   }
 };
@@ -361,5 +362,4 @@ exports.deleteAccount = async (req, res) => {
     res.status(500).json({ error: 'Erro ao excluir conta' });
   }
 };
-
-  
+      
