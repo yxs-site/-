@@ -112,3 +112,4 @@ exports.sendWelcomeEmail = async (user) => {
         message: message,
     });
 };
+
