@@ -332,7 +332,13 @@ exports.changePassword = async (req, res) => {
     res.json({ message: 'Senha alterada com sucesso!' });
   } catch (error) {
     console.error('✗ Erro ao alterar senha:', error.message);
-    res.status(500).json({ error: 'Erro ao alterar senha' });
+    // Adicionar log detalhado para o erro
+    console.log(error);
+    // Se o erro for de validação (400) ou autenticação (401), já foi retornado.
+    // Caso contrário, é um erro interno (500).
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Erro interno ao alterar senha' });
+    }
   }
 };
 
@@ -373,4 +379,5 @@ exports.deleteAccount = async (req, res) => {
   }
 };
 
-    
+
+  
