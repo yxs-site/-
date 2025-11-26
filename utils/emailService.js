@@ -1,123 +1,115 @@
-const nodemailer = require('nodemailer');
+const fetch = require('node-fetch');
 
-// Configurar transportador com Brevo
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'smtp-relay.brevo.com',
-  port: parseInt(process.env.EMAIL_PORT) || 587,
-  secure: (process.env.EMAIL_PORT === '465' || parseInt(process.env.EMAIL_PORT) === 465),
-  auth: {
-    user: process.env.EMAIL_USER || '9c8357001@smtp-brevo.com',
-    pass: process.env.EMAIL_PASS || 'arthur2003',
-  },
-  // Removendo connectionTimeout e socketTimeout para usar os padrões do Nodemailer
-});
+// Função para enviar e-mail usando a API do Brevo
+exports.sendEmail = async (options) => {
+    // A chave de API será lida da variável de ambiente BREVO_API_KEY
+    const BREVO_API_KEY = process.env.BREVO_API_KEY;
+    const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 
-// Função para enviar e-mail
-const sendEmail = async (to, subject, htmlContent, textContent = '') => {
-  const mailOptions = {
-    from: process.env.EMAIL_FROM || 'Card YXS <noreply@yxs-site.onrender.com>',
-    to: to,
-    subject: subject,
-    html: htmlContent,
-    text: textContent || htmlContent.replace(/<[^>]*>/g, ''),
-  };
+    if (!BREVO_API_KEY) {
+        console.error('✗ Erro: BREVO_API_KEY não está configurada.');
+        // Lança um erro para que o authController possa capturar e informar o usuário
+        throw new Error('Configuração de e-mail ausente. Por favor, configure a BREVO_API_KEY.');
+    }
 
-  try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('✓ E-mail enviado com sucesso:', info.response);
-    return info;
-  } catch (error) {
-    console.error('✗ Erro ao enviar e-mail:', error.message);
-    throw new Error(`Falha no envio do e-mail: ${error.message}`);
-  }
+    // O endereço de e-mail do remetente será lido da variável de ambiente EMAIL_FROM_ADDRESS
+    const senderEmail = process.env.EMAIL_FROM_ADDRESS || 'noreply@yxs-site.onrender.com';
+    const senderName = process.env.EMAIL_FROM_NAME || 'Card YXS';
+
+    const emailData = {
+        sender: {
+            name: options.fromName || senderName,
+            email: options.fromEmail || senderEmail
+        },
+        to: [{
+            email: options.email,
+            name: options.name || options.email
+        }],
+        subject: options.subject,
+        htmlContent: options.message,
+    };
+
+    try {
+        const response = await fetch(BREVO_API_URL, {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'api-key': BREVO_API_KEY,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(emailData)
+        });
+
+        if (response.ok) {
+            console.log(`✓ E-mail enviado com sucesso para: ${options.email}`);
+        } else {
+            const errorData = await response.json();
+            console.error(`✗ Erro ao enviar e-mail via Brevo API (Status: ${response.status}):`, errorData);
+            throw new Error(`Falha no envio do e-mail: ${JSON.stringify(errorData)}`);
+        }
+    } catch (error) {
+        console.error('✗ Erro ao enviar e-mail:', error.message);
+        throw new Error(`Falha no envio do e-mail: ${error.message}`);
+    }
 };
 
-// Função para enviar e-mail de recuperação de senha
-const sendPasswordResetEmail = async (email, resetLink) => {
-  const subject = 'Recuperação de Senha - Card YXS';
-  const htmlContent = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2 style="color: #333;">Recuperação de Senha</h2>
-      <p>Olá,</p>
-      <p>Recebemos uma solicitação para redefinir sua senha. Clique no link abaixo para criar uma nova senha:</p>
-      <p>
-        <a href="${resetLink}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
-          Redefinir Senha
-        </a>
-      </p>
-      <p>Ou copie e cole este link no seu navegador:</p>
-      <p style="word-break: break-all; color: #666;">${resetLink}</p>
-      <p style="color: #999; font-size: 12px;">Este link expira em 1 hora.</p>
-      <p style="color: #999; font-size: 12px;">Se você não solicitou esta recuperação, ignore este e-mail.</p>
-    </div>
-  `;
+// Função de wrapper para recuperação de senha (mantida para compatibilidade com authController)
+exports.sendPasswordResetEmail = async (user, resetURL) => {
+    const subject = 'Redefinição de Senha - Card YXS';
+    const message = `
+        Olá ${user.username},
+        
+        Você solicitou a redefinição de sua senha. Por favor, clique no link abaixo para redefinir sua senha:
+        
+        ${resetURL}
+        
+        Este link é válido por apenas 1 hora.
+        
+        Se você não solicitou isso, por favor, ignore este e-mail.
+    `;
 
-  try {
-    await sendEmail(email, subject, htmlContent);
-    console.log('✓ E-mail de recuperação de senha enviado para:', email);
-  } catch (error) {
-    console.error('✗ Erro ao enviar e-mail de recuperação:', error.message);
-    throw error;
-  }
+    await exports.sendEmail({
+        email: user.email,
+        name: user.username,
+        subject: subject,
+        message: message,
+    });
 };
 
-// Função para enviar e-mail de boas-vindas
-const sendWelcomeEmail = async (email, name) => {
-  const subject = 'Bem-vindo(a) ao Card YXS!';
-  const htmlContent = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2 style="color: #333;">Bem-vindo(a) ao Card YXS!</h2>
-      <p>Olá <strong>${name}</strong>,</p>
-      <p>Sua conta foi criada com sucesso! 🎉</p>
-      <p>Agora você pode fazer login e começar a usar o Card YXS.</p>
-      <p>
-        <a href="https://yxs-site.onrender.com" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;">
-          Acessar Card YXS
-        </a>
-      </p>
-      <p style="color: #999; font-size: 12px;">Se você não criou esta conta, ignore este e-mail.</p>
-    </div>
-  `;
+// Função de wrapper para confirmação de redefinição de senha
+exports.sendResetConfirmationEmail = async (user) => {
+    const subject = 'Senha Redefinida com Sucesso - Card YXS';
+    const message = `
+        Olá ${user.username},
+        
+        Sua senha foi redefinida com sucesso.
+        
+        Se você não realizou esta ação, por favor, entre em contato com o suporte imediatamente.
+    `;
 
-  try {
-    await sendEmail(email, subject, htmlContent);
-    console.log('✓ E-mail de boas-vindas enviado para:', email);
-  } catch (error) {
-    console.error('✗ Erro ao enviar e-mail de boas-vindas:', error.message);
-    // Não lança erro para não bloquear o registro
-  }
+    await exports.sendEmail({
+        email: user.email,
+        name: user.username,
+        subject: subject,
+        message: message,
+    });
 };
 
-// Função para enviar e-mail de confirmação de reset
-const sendResetConfirmationEmail = async (email) => {
-  const subject = 'Senha Redefinida - Card YXS';
-  const htmlContent = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2 style="color: #333;">Senha Redefinida com Sucesso</h2>
-      <p>Olá,</p>
-      <p>Sua senha foi redefinida com sucesso! ✓</p>
-      <p>Você agora pode fazer login com sua nova senha.</p>
-      <p>
-        <a href="https://yxs-site.onrender.com" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
-          Fazer Login
-        </a>
-      </p>
-      <p style="color: #999; font-size: 12px;">Se você não fez esta alteração, entre em contato conosco imediatamente.</p>
-    </div>
-  `;
+// Função de wrapper para e-mail de boas-vindas (se houver)
+exports.sendWelcomeEmail = async (user) => {
+    const subject = 'Bem-vindo(a) ao Card YXS!';
+    const message = `
+        Olá ${user.username},
+        
+        Sua conta foi criada com sucesso. Bem-vindo(a) à comunidade Card YXS!
+        
+        Se precisar de ajuda, não hesite em nos contatar.
+    `;
 
-  try {
-    await sendEmail(email, subject, htmlContent);
-    console.log('✓ E-mail de confirmação de reset enviado para:', email);
-  } catch (error) {
-    console.error('✗ Erro ao enviar e-mail de confirmação:', error.message);
-    // Não lança erro
-  }
-};
-
-module.exports = {
-  sendEmail,
-  sendPasswordResetEmail,
-  sendWelcomeEmail,
-  sendResetConfirmationEmail,
+    await exports.sendEmail({
+        email: user.email,
+        name: user.username,
+        subject: subject,
+        message: message,
+    });
 };
