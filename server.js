@@ -2,11 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors'); // Adicionado: Importar o módulo cors
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+app.use(cors()); // Adicionado: Habilitar CORS para todas as rotas
 app.use(express.json()); // Para parsear application/json
 app.use(express.urlencoded({ extended: true })); // Para parsear application/x-www-form-urlencoded
 
