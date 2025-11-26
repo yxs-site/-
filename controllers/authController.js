@@ -48,7 +48,7 @@ exports.register = async (req, res) => {
     console.log('✓ Usuário registrado:', email);
 
     // Enviar e-mail de boas-vindas em background (não bloqueia a resposta)
-    sendWelcomeEmail(email, username).catch(err => {
+    sendWelcomeEmail(newUser).catch(err => {
       console.error('✗ Erro ao enviar e-mail de boas-vindas:', err.message);
     });
 
@@ -69,9 +69,12 @@ exports.register = async (req, res) => {
       }
     });
   } catch (error) {
-    // CORREÇÃO: Loga o objeto de erro completo para diagnóstico
+        // Tratamento de erro mais específico
+    if (error.code === 11000) { // Erro de chave duplicada do MongoDB (e-mail ou username já existem)
+      return res.status(400).json({ error: 'Usuário ou e-mail já cadastrado' });
+    }
     console.error('✗ Erro ao registrar usuário:', error);
-    res.status(500).json({ error: 'Erro ao registrar usuário' });
+    res.status(500).json({ error: 'Erro interno ao registrar usuário' });
   }
 };
 
@@ -125,7 +128,8 @@ exports.login = async (req, res) => {
     });
   } catch (error) {
     console.error('✗ Erro ao fazer login:', error.message);
-    res.status(500).json({ error: 'Erro ao fazer login' });
+    // Em caso de erro interno, retornar 500, mas manter o 401 para credenciais inválidas
+    res.status(500).json({ error: 'Erro interno ao fazer login' });
   }
 };
 
@@ -163,7 +167,7 @@ exports.forgotPassword = async (req, res) => {
     console.log('✓ Token de reset gerado para:', email);
 
     // Enviar e-mail em background (não bloqueia a resposta)
-    sendPasswordResetEmail(email, resetLink).catch(err => {
+    sendPasswordResetEmail(user, resetLink).catch(err => {
       console.error('✗ Erro ao enviar e-mail de recuperação:', err.message);
     });
 
@@ -221,7 +225,7 @@ exports.resetPassword = async (req, res) => {
     console.log('✓ Senha redefinida para:', email);
 
     // Enviar e-mail de confirmação em background
-    sendResetConfirmationEmail(email).catch(err => {
+    sendResetConfirmationEmail(user).catch(err => {
       console.error('✗ Erro ao enviar e-mail de confirmação:', err.message);
     });
 

@@ -1,18 +1,16 @@
 const fetch = require('node-fetch');
 
-// Função para enviar e-mail usando a API do Brevo
+// Função principal para enviar e-mail usando a API do Brevo
 exports.sendEmail = async (options) => {
-    // A chave de API será lida da variável de ambiente BREVO_API_KEY
     const BREVO_API_KEY = process.env.BREVO_API_KEY;
     const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 
     if (!BREVO_API_KEY) {
         console.error('✗ Erro: BREVO_API_KEY não está configurada.');
-        // Lança um erro para que o authController possa capturar e informar o usuário
         throw new Error('Configuração de e-mail ausente. Por favor, configure a BREVO_API_KEY.');
     }
 
-    // O endereço de e-mail do remetente será lido da variável de ambiente EMAIL_FROM_ADDRESS
+    // O endereço de e-mail do remetente será lido das variáveis de ambiente
     const senderEmail = process.env.EMAIL_FROM_ADDRESS || 'noreply@yxs-site.onrender.com';
     const senderName = process.env.EMAIL_FROM_NAME || 'Card YXS';
 
@@ -45,6 +43,7 @@ exports.sendEmail = async (options) => {
         } else {
             const errorData = await response.json();
             console.error(`✗ Erro ao enviar e-mail via Brevo API (Status: ${response.status}):`, errorData);
+            // Incluir o corpo da resposta de erro para melhor diagnóstico
             throw new Error(`Falha no envio do e-mail: ${JSON.stringify(errorData)}`);
         }
     } catch (error) {
@@ -53,7 +52,7 @@ exports.sendEmail = async (options) => {
     }
 };
 
-// Função de wrapper para recuperação de senha (mantida para compatibilidade com authController)
+// Função de wrapper para recuperação de senha
 exports.sendPasswordResetEmail = async (user, resetURL) => {
     const subject = 'Redefinição de Senha - Card YXS';
     const message = `
@@ -61,7 +60,7 @@ exports.sendPasswordResetEmail = async (user, resetURL) => {
         
         Você solicitou a redefinição de sua senha. Por favor, clique no link abaixo para redefinir sua senha:
         
-        ${resetURL}
+        <a href="${resetURL}">Redefinir Senha</a>
         
         Este link é válido por apenas 1 hora.
         
@@ -95,7 +94,7 @@ exports.sendResetConfirmationEmail = async (user) => {
     });
 };
 
-// Função de wrapper para e-mail de boas-vindas (se houver)
+// Função de wrapper para e-mail de boas-vindas
 exports.sendWelcomeEmail = async (user) => {
     const subject = 'Bem-vindo(a) ao Card YXS!';
     const message = `

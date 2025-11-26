@@ -124,12 +124,7 @@ function logout() {
   currentUser = null;
   
   // Redirecionar para a tela de login
-  // Garantir que o botão de login seja reativado
-  const loginSubmitButton = loginForm.querySelector("button[type=\"submit\"]");
-  if (loginSubmitButton) {
-    loginSubmitButton.disabled = false;
-    loginSubmitButton.textContent = "Entrar";
-  }
+
   // O welcomeScreen é a tela principal, que contém o menu.
   // O loginScreen é a tela de autenticação.
   switchScreen(welcomeScreen, loginScreen);
@@ -557,6 +552,9 @@ loginForm.addEventListener("submit", async (e) => {
   } catch (error) {
     console.error("Erro no login:", error);
     showError(loginErrorMessage, error.message || "Erro ao entrar. Tente novamente.");
+    submitButton.disabled = false;
+    submitButton.textContent = "Entrar";
+  } finally {
     submitButton.disabled = false;
     submitButton.textContent = "Entrar";
   }
