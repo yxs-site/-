@@ -135,7 +135,7 @@ exports.sendWelcomeEmail = async (user) => {
                 <p style="font-size: 16px;">Estamos felizes em ter você conosco!</p>
 
                 <!-- Botão -->
-                <a href="https://yxs-site.onrender.com/login" style="display: inline-block; background-color: #3C1053; color: #ffffff; text-decoration: none; padding: 12px 25px; margin: 25px 0; border-radius: 5px; font-weight: bold; font-size: 16px;">
+                <a href="https://yxs-site.onrender.com" style="display: inline-block; background-color: #3C1053; color: #ffffff; text-decoration: none; padding: 12px 25px; margin: 25px 0; border-radius: 5px; font-weight: bold; font-size: 16px;">
                     ACESSAR MINHA CONTA
                 </a>
 
