@@ -163,7 +163,8 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
 
     // Construir link de reset
-    const resetLink = `https://yxs-site.onrender.com/#/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`;
+    const clientURL = process.env.CLIENT_URL || 'https://yxs-site.onrender.com';
+    const resetLink = `${clientURL}/#/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`;
 
     console.log('✓ Token de reset gerado para:', email);
 
@@ -379,4 +380,5 @@ exports.deleteAccount = async (req, res) => {
   }
 };
 
-    
+
+                                      
