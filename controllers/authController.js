@@ -345,7 +345,7 @@ exports.changePassword = async (req, res) => {
 // Excluir conta
 exports.deleteAccount = async (req, res) => {
   try {
-    const userId = req.user._id; // CORREÇÃO: O middleware anexa o objeto User completo
+    const userId = req.user._id; // O middleware anexa o objeto User completo
     const { password } = req.body;
 
     // Validar campo obrigatório
@@ -403,4 +403,4 @@ exports.resetDatabase = async (req, res) => {
     res.status(500).json({ error: 'Erro interno ao resetar o banco de dados' });
   }
 };
-                
+    
