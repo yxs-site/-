@@ -21,7 +21,4 @@ router.post('/change-password', authMiddleware, authController.changePassword);
 // Rota para excluir a conta (protegida)
 router.delete('/delete-account', authMiddleware, authController.deleteAccount);
 
-// Rota administrativa para resetar o banco de dados (DELETE /api/auth/reset-db)
-router.delete('/reset-db', authController.resetDatabase);
-
 module.exports = router;
