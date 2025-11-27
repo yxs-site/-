@@ -255,29 +255,6 @@ exports.getUser = async (req, res) => {
   }
 };
 
-// Função administrativa para resetar o banco de dados (apagar todos os usuários)
-exports.resetDatabase = async (req, res) => {
-    try {
-        // Acesso protegido por uma chave de administrador no cabeçalho
-        const adminKey = req.headers['x-admin-reset-key'];
-        
-        if (adminKey !== process.env.ADMIN_RESET_KEY) {
-            return res.status(403).json({ error: 'Acesso negado. Chave de administrador inválida.' });
-        }
-
-        // Deletar todos os documentos da coleção User
-        const result = await User.deleteMany({});
-
-        console.log(`✓ Banco de dados resetado. ${result.deletedCount} usuários deletados.`);
-
-        res.status(200).json({ message: `Banco de dados resetado com sucesso. ${result.deletedCount} usuários deletados.` });
-
-    } catch (error) {
-        console.error('✗ Erro ao resetar o banco de dados:', error.message);
-        res.status(500).json({ error: 'Erro interno do servidor ao resetar o banco de dados.' });
-    }
-};
-
 // Atualizar perfil do usuário
 exports.updateProfile = async (req, res) => {
   try {
@@ -401,4 +378,5 @@ exports.deleteAccount = async (req, res) => {
     res.status(500).json({ error: 'Erro ao excluir conta' });
   }
 };
+
     
