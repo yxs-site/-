@@ -353,12 +353,8 @@ exports.deleteAccount = async (req, res) => {
       return res.status(400).json({ error: 'Senha é obrigatória para excluir a conta' });
     }
 
-    // Buscar usuário
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ error: 'Usuário não encontrado' });
-    }
+    // O middleware authMiddleware já anexou o objeto user completo em req.user
+    const user = req.user;
 
     // Verificar senha
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -378,3 +374,33 @@ exports.deleteAccount = async (req, res) => {
     res.status(500).json({ error: 'Erro ao excluir conta' });
   }
 };
+
+// Resetar o banco de dados (Função Administrativa)
+exports.resetDatabase = async (req, res) => {
+  try {
+    const adminKey = req.header('X-Admin-Reset-Key');
+    const expectedKey = process.env.ADMIN_RESET_KEY;
+
+    // 1. Verificar se a chave de reset foi fornecida
+    if (!adminKey) {
+      return res.status(401).json({ error: 'Chave de reset administrativa não fornecida' });
+    }
+
+    // 2. Verificar se a chave de reset corresponde à variável de ambiente
+    if (adminKey !== expectedKey) {
+      console.warn('✗ Tentativa de reset de banco de dados com chave inválida.');
+      return res.status(403).json({ error: 'Chave de reset administrativa inválida' });
+    }
+
+    // 3. Limpar todas as contas de usuário
+    const result = await User.deleteMany({});
+
+    console.log(`✓ Banco de dados resetado com sucesso. ${result.deletedCount} usuários removidos.`);
+
+    res.json({ message: `Banco de dados resetado com sucesso. ${result.deletedCount} usuários removidos.` });
+  } catch (error) {
+    console.error('✗ Erro ao resetar o banco de dados:', error.message);
+    res.status(500).json({ error: 'Erro interno ao resetar o banco de dados' });
+  }
+};
+                
