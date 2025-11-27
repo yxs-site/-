@@ -21,7 +21,7 @@ const rememberMeCheckbox = document.getElementById("remember-me");
 // URL da API (ajuste se necessário)
 // Forçando para localhost:3000, que é a porta padrão do servidor Node.js
 // A URL da API será relativa, pois o frontend e o backend estarão no mesmo servidor.
-const API_URL = "";
+const API_URL = "https://yxs-api.onrender.com";
 
 // Variável global para armazenar o token de reset
 let resetToken = null;
