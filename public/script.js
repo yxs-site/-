@@ -267,7 +267,8 @@ profilePicInput.addEventListener("change", (e) => {
   if (file) {
     const reader = new FileReader();
     reader.onload = (event) => {
-      const imgD      document.getElementById("profile-img").src = imgData;
+      const imgData = event.target.result;
+      document.getElementById("profile-img").src = imgData;
       localStorage.setItem("profileImg", imgData);
       
       // NOVO: Enviar a nova foto para o backend para persistência no banco de dados.
