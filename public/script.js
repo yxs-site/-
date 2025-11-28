@@ -613,102 +613,10 @@ resetPasswordForm.addEventListener("submit", async (e) => {
   }
 });
 
-// --- LÓGICA DE PARSE DE URL PARA RESET DE SENHA ---
-function parseResetURL() {
-  const hash = window.location.hash;
-  if (hash.startsWith('#/reset-password')) {
-    // Extrair a parte dos parâmetros (depois do '?')
-    const questionMarkIndex = hash.indexOf('?');
-    if (questionMarkIndex !== -1) {
-      const queryString = hash.substring(questionMarkIndex + 1);
-      const urlParams = new URLSearchParams(queryString);
-      const token = urlParams.get('token');
-      const email = urlParams.get('email');
-      
-      if (token && email) {
-        resetToken = token;
-        document.getElementById("reset-email").value = decodeURIComponent(email);
-        
-        // Esconder todas as telas e mostrar apenas a de redefinição de senha
-        document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
-        resetPasswordScreen.classList.add("active");
-        
-        console.log('✓ Tela de reset de senha ativada com sucesso');
-        console.log('Token:', token.substring(0, 10) + '...');
-        console.log('Email:', email);
-        
-        // Retorna true para indicar que a tela de reset foi ativada
-        return true;
-      }
-    }
-  }
-  return false;
-}
 
-// --- INICIALIZAÇÃO ---
-document.addEventListener("DOMContentLoaded", () => {
-  // 1. Verificar se há token de reset na URL
-  const isResetScreen = parseResetURL();
-  
-  // 2. Se não estiver na tela de reset, verificar se o usuário já está logado no localStorage
-  if (!isResetScreen) {
-    checkLoginOnLoad();
-  }
-});
-resetPasswordForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  
-  const email = document.getElementById("reset-email").value;
-  const newPassword = document.getElementById("reset-new-password").value;
-  const confirmPassword = document.getElementById("reset-confirm-password").value;
-  
-  // Desabilitar botão
-  const submitBtn = resetPasswordForm.querySelector("button[type='submit']");
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Redefinindo...";
-  
-  try {
-    if (!resetToken) {
-      throw new Error("Token de redefinição ausente.");
-    }
-    
-    const response = await fetch(`${API_URL}/api/auth/reset-password`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token: resetToken, email, newPassword, confirmPassword }),
-    });
-    
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.error || "Erro ao redefinir senha.");
-    }
-    
-    // Mostrar mensagem de sucesso
-    resetPasswordMessage.classList.remove("error-message");
-    resetPasswordMessage.classList.add("success-message");
-    resetPasswordMessage.textContent = data.message || "Senha redefinida com sucesso!";
-    resetPasswordMessage.classList.add("show");
-    
-    // Limpar formulário
-    resetPasswordForm.reset();
-    
-    // Redirecionar para login após 2 segundos
-    setTimeout(() => {
-      switchScreen(resetPasswordScreen, loginScreen);
-      resetPasswordMessage.classList.remove("show");
-    }, 2000);
-    
-  } catch (error) {
-    console.error("Erro ao redefinir senha:", error);
-    showError(resetPasswordMessage, error.message || "Erro ao redefinir senha. Tente novamente.");
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Redefinir Senha";
-  }
-});
+
+
+
 
 // --- LÓGICA DE ALTERAÇÃO DE TELA ---
 document.getElementById("switch-to-login").addEventListener("click", (e) => {
@@ -758,19 +666,50 @@ document.querySelectorAll(".toggle-password").forEach(icon => {
   });
 });
 
+
+
 // --- LÓGICA DE PARSE DE URL PARA RESET DE SENHA ---
 function parseResetURL() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('token');
-  const email = urlParams.get('email');
-  
-  if (token && email) {
-    resetToken = token;
-    document.getElementById("reset-email").value = decodeURIComponent(email);
-    // Mudar para a tela de redefinição de senha
-    switchScreen(loginScreen, resetPasswordScreen);
+  const hash = window.location.hash;
+  if (hash.startsWith('#/reset-password')) {
+    // Extrair a parte dos parâmetros (depois do '?')
+    const questionMarkIndex = hash.indexOf('?');
+    if (questionMarkIndex !== -1) {
+      const queryString = hash.substring(questionMarkIndex + 1);
+      const urlParams = new URLSearchParams(queryString);
+      const token = urlParams.get('token');
+      const email = urlParams.get('email');
+      
+      if (token && email) {
+        resetToken = token;
+        document.getElementById("reset-email").value = decodeURIComponent(email);
+        
+        // Esconder todas as telas e mostrar apenas a de redefinição de senha
+        document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
+        resetPasswordScreen.classList.add("active");
+        
+        console.log('✓ Tela de reset de senha ativada com sucesso');
+        console.log('Token:', token.substring(0, 10) + '...');
+        console.log('Email:', email);
+        
+        // Retorna true para indicar que a tela de reset foi ativada
+        return true;
+      }
+    }
   }
+  return false;
 }
+
+// --- INICIALIZAÇÃO ---
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Verificar se há token de reset na URL
+  const isResetScreen = parseResetURL();
+  
+  // 2. Se não estiver na tela de reset, verificar se o usuário já está logado no localStorage
+  if (!isResetScreen) {
+    checkLoginOnLoad();
+  }
+});
 
 // --- LÓGICA DE PULL-TO-REFRESH ---
 let pullStartY = 0;
@@ -809,14 +748,7 @@ document.addEventListener('touchend', () => {
     pullDistance = 0;
 });
 
-// --- INICIALIZAÇÃO ---
-document.addEventListener("DOMContentLoaded", () => {
-  // 1. Verificar se há token de reset na URL
-  parseResetURL();
-  
-  // 2. Verificar se o usuário já está logado no localStorage
-  checkLoginOnLoad();
-});
+
 
 // --- LÓGICA DE TEMA (CONTINUAÇÃO) ---
 const themeToggle = document.getElementById("theme-toggle");
