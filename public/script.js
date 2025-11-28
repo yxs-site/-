@@ -617,20 +617,29 @@ resetPasswordForm.addEventListener("submit", async (e) => {
 function parseResetURL() {
   const hash = window.location.hash;
   if (hash.startsWith('#/reset-password')) {
-    const urlParams = new URLSearchParams(hash.substring(hash.indexOf('?')));
-    const token = urlParams.get('token');
-    const email = urlParams.get('email');
-    
-    if (token && email) {
-      resetToken = token;
-      document.getElementById("reset-email").value = decodeURIComponent(email);
+    // Extrair a parte dos parâmetros (depois do '?')
+    const questionMarkIndex = hash.indexOf('?');
+    if (questionMarkIndex !== -1) {
+      const queryString = hash.substring(questionMarkIndex + 1);
+      const urlParams = new URLSearchParams(queryString);
+      const token = urlParams.get('token');
+      const email = urlParams.get('email');
       
-      // Esconder todas as telas e mostrar apenas a de redefinição de senha
-      document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
-      resetPasswordScreen.classList.add("active");
-      
-      // Retorna true para indicar que a tela de reset foi ativada
-      return true;
+      if (token && email) {
+        resetToken = token;
+        document.getElementById("reset-email").value = decodeURIComponent(email);
+        
+        // Esconder todas as telas e mostrar apenas a de redefinição de senha
+        document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
+        resetPasswordScreen.classList.add("active");
+        
+        console.log('✓ Tela de reset de senha ativada com sucesso');
+        console.log('Token:', token.substring(0, 10) + '...');
+        console.log('Email:', email);
+        
+        // Retorna true para indicar que a tela de reset foi ativada
+        return true;
+      }
     }
   }
   return false;
