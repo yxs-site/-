@@ -328,7 +328,7 @@ btnCancelarExclusao.addEventListener("click", () => {
 });
 
 btnConfirmarExclusao.addEventListener("click", async () => {
-  const passwordInput = document.getElementById("excluir-senha");
+    const passwordInput = document.getElementById("excluir-senha");
   const password = passwordInput.value;
   const excluirMessage = document.getElementById("excluir-conta-message");
   
@@ -380,7 +380,7 @@ btnConfirmarExclusao.addEventListener("click", async () => {
     showError(excluirMessage, error.message || "Erro ao excluir conta. Tente novamente.");
   } finally {
     btnConfirmarExclusao.disabled = false;
-    btnConfirmarExclusao.textContent = "Confirmar Exclusão";
+    btnConfirmarExclusao.textContent = "Excluir Conta";
     passwordInput.value = ""; // Limpar campo de senha
   }
 });
