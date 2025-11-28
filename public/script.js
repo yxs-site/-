@@ -63,10 +63,13 @@ applyTheme(savedTheme);
 
 // --- Lógica de Transição de Tela ---
 function switchScreen(hideScreen, showScreen) {
+  // Garantir que a tela a ser mostrada esteja visível antes de remover a anterior
+  showScreen.classList.add("active");
   hideScreen.classList.remove("active");
-  setTimeout(() => {
-    showScreen.classList.add("active");
-  }, 500);
+  // Opcional: Adicionar um pequeno delay para a transição de opacidade, se necessário
+  // setTimeout(() => {
+  //   showScreen.classList.add("active");
+  // }, 500);
 }
 
 // --- MENU NAVEGAÇÃO ---

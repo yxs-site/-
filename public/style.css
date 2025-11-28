@@ -317,13 +317,11 @@ body {
 
 /* Links de Troca (Registrar/Recuperar Conta) */
 .switch-links {
-    /* Removendo display: flex para permitir que os links se centralizem como blocos inline */
-    /* display: flex; */
-    text-align: center; /* Centraliza os elementos inline-block */
+    display: flex; /* Usar flex para garantir que os links fiquem lado a lado */
+    justify-content: space-between; /* Espaçar os links */
+    align-items: center;
     margin-top: 1rem;
-    /* flex-wrap: wrap; */
-    /* gap: 10px; */
-    width: 100%; /* Garante que ocupe a largura total do auth-container */
+    width: 100%;
 }
 
 /* Centralizar botões "Voltar para Login" e "Entrar Agora" */
@@ -847,16 +845,28 @@ body {
 /* ===== ÍCONE DE SUPORTE WHATSAPP (Telas de Autenticação) ===== */
 .support-icon-auth {
     position: absolute;
-    bottom: 15px;
-    right: 15px;
-    font-size: 2rem;
-    color: #25D366; /* Cor do WhatsApp */
-    transition: transform 0.2s;
+    top: 15px; /* Posição superior */
+    right: 15px; /* Posição direita */
+    font-size: 0.9rem; /* Fonte menor */
+    font-weight: 600;
+    color: var(--color-text-secondary); /* Cor de texto secundária */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: color 0.2s, background-color 0.2s;
     z-index: 10;
 }
 
 .support-icon-auth:hover {
-    transform: scale(1.1);
+    color: var(--color-primary);
+    background-color: var(--color-sidebar-hover); /* Um leve fundo no hover */
+}
+
+.support-icon-auth i {
+    color: var(--color-primary); /* Cor do ícone */
 }
 
 /* Estilo para o link de suporte na página de Configurações */
