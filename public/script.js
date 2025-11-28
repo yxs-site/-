@@ -895,3 +895,6 @@ pages.forEach(page => {
 if (welcomeScreen.classList.contains('active')) {
     homePage.classList.add('active');
 }
+
+// Inicialização
+checkLoginOnLoad(); // Ativar a verificação de login ao carregar a página
