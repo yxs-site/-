@@ -1,6 +1,7 @@
 /* Variáveis de Cores */
 :root {
     --color-naval-blue: #001F3F; /* Azul Naval */
+    --color-light-blue: #66B2FF; /* Azul claro para links ativos */
     --color-primary: var(--color-naval-blue); /* Botão principal volta a ser Azul Naval */
     --color-white: #FFFFFF;
     --color-black: #000000;
@@ -325,6 +326,14 @@ body {
     width: 100%; /* Garante que ocupe a largura total do auth-container */
 }
 
+/* Centralizar botões "Voltar para Login" e "Entrar Agora" */
+.auth-container .btn-secondary,
+.auth-container .btn-primary {
+    margin-left: auto;
+    margin-right: auto;
+    display: block; /* Garante que ocupe a largura total e o margin auto funcione */
+}
+
 .switch-link {
     color: var(--color-link);
     text-decoration: none;
@@ -514,13 +523,13 @@ body {
 
 .nav-link:hover {
     background-color: var(--color-sidebar-hover);
-    color: var(--color-primary);
+    color: var(--color-light-blue); /* Usar azul claro no hover */
 }
 
 .nav-link.active {
     background-color: var(--color-sidebar-hover);
-    color: var(--color-primary);
-    border-left: 4px solid var(--color-primary);
+    color: var(--color-light-blue); /* Usar azul claro no ativo */
+    border-left: 4px solid var(--color-light-blue); /* Usar azul claro na borda */
     padding-left: 16px;
 }
 
@@ -833,6 +842,26 @@ body {
 .modal-footer .btn-danger {
     flex: 1;
     margin-bottom: 0;
+}
+
+/* ===== ÍCONE DE SUPORTE WHATSAPP (Telas de Autenticação) ===== */
+.support-icon-auth {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 2rem;
+    color: #25D366; /* Cor do WhatsApp */
+    transition: transform 0.2s;
+    z-index: 10;
+}
+
+.support-icon-auth:hover {
+    transform: scale(1.1);
+}
+
+/* Estilo para o link de suporte na página de Configurações */
+.support-link {
+    text-decoration: none; /* Remover sublinhado do link */
 }
 
 /* ===== RESPONSIVIDADE ===== */

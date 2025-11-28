@@ -153,18 +153,19 @@ function loadProfileData() {
   
   if (storedUser && storedUser.token) {
     currentUser = storedUser;
-    // CORREÇÃO: Os dados do usuário estão em storedUser.user
+    // Os dados do usuário estão em storedUser.user
     updateProfileUI(storedUser.user);
     
-    // Carregar foto de perfil se existir
-    // CORREÇÃO: A foto de perfil deve vir dos dados do usuário (se implementado no backend)
-    // Por enquanto, manter a lógica de localStorage, mas garantir que seja limpa no logout.
-    const profileImg = localStorage.getItem("profileImg");
-    if (profileImg) {
-      document.getElementById("profile-img").src = profileImg;
+    // Carregar foto de perfil do objeto de usuário (persistência do backend)
+    const profilePictureUrl = storedUser.user.profilePicture;
+    if (profilePictureUrl) {
+      document.getElementById("profile-img").src = profilePictureUrl;
+      // Manter no localStorage para carregamento rápido, mas a fonte de verdade é o objeto user
+      localStorage.setItem("profileImg", profilePictureUrl); 
     } else {
-      // Se não houver foto no localStorage, usar a padrão (ou a do objeto user, se disponível)
-      document.getElementById("profile-img").src = storedUser.user.profilePicture || "caminho/para/foto/padrao.png"; // Assumindo um caminho padrão
+      // Se não houver foto no objeto user, usar a padrão
+      document.getElementById("profile-img").src = "caminho/para/foto/padrao.png"; 
+      localStorage.removeItem("profileImg");
     }
     
     // Mostrar a tela principal se o usuário estiver logado
@@ -181,6 +182,66 @@ function loadProfileData() {
     switchScreen(welcomeScreen, loginScreen);
   }
 }
+
+// Função para enviar a foto de perfil para o backend
+async function saveProfilePicture(base64Image) {
+    const storedUser = JSON.parse(localStorage.getItem("cardYXSUser"));
+    
+    if (!storedUser || !storedUser.token) {
+        console.error("Usuário não autenticado. Não é possível salvar a foto.");
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_URL}/api/auth/update-profile`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${storedUser.token}`
+            },
+            body: JSON.stringify({
+                profilePicture: base64Image
+            }),
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || "Erro ao salvar foto de perfil.");
+        }
+        
+        console.log("Foto de perfil salva com sucesso no backend!");
+        
+        // Atualizar o objeto currentUser e localStorage com a nova URL/Base64
+        storedUser.user.profilePicture = base64Image;
+        localStorage.setItem("cardYXSUser", JSON.stringify(storedUser));
+        currentUser = storedUser;
+        
+    } catch (error) {
+        console.error("Erro ao salvar foto de perfil:", error.message);
+        // Opcional: reverter a imagem no frontend para a anterior ou padrão
+    }
+}
+
+// --- UPLOAD DE FOTO DE PERFIL ---
+const profilePicInput = document.getElementById("profile-pic-input");
+const profileImg = document.getElementById("profile-img");
+
+profilePicInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const imgData = event.target.result;
+      profileImg.src = imgData;
+      localStorage.setItem("profileImg", imgData);
+      
+      // NOVO: Enviar a nova foto para o backend para persistência no banco de dados.
+      saveProfilePicture(imgData);
+    };
+    reader.readAsDataURL(file);
+  }
+});
 
 // --- VERIFICAR LOGIN AO CARREGAR A PÁGINA ---
 function checkLoginOnLoad() {
@@ -203,17 +264,15 @@ profilePicInput.addEventListener("change", (e) => {
   if (file) {
     const reader = new FileReader();
     reader.onload = (event) => {
-      const imgData = event.target.result;
-      profileImg.src = imgData;
+      const imgD      document.getElementById("profile-img").src = imgData;
       localStorage.setItem("profileImg", imgData);
-      // TODO: Enviar a nova foto para o backend para persistência no banco de dados.
-      // O problema de persistência entre contas será resolvido com a limpeza no logout,
-      // mas a persistência real da foto precisa de uma chamada ao backend (updateProfile).
+      
+      // NOVO: Enviar a nova foto para o backend para persistência no banco de dados.
+      saveProfilePicture(imgData);
     };
     reader.readAsDataURL(file);
   }
 });
-
 // --- MODAL DE ALTERAÇÃO DE SENHA ---
 const btnAlterarSenha = document.getElementById("btn-alterar-senha");
 const modalAlterarSenha = document.getElementById("modal-alterar-senha");
