@@ -518,13 +518,17 @@ forgotPasswordForm.addEventListener("submit", async (e) => {
     const data = await response.json();
     
     if (!response.ok) {
+      // Se o status for 404 (e-mail não cadastrado), exibe a mensagem de erro do backend
+      if (response.status === 404) {
+        throw new Error(data.error || "E-mail não cadastrado.");
+      }
       throw new Error(data.error || "Erro ao solicitar recuperação de senha.");
     }
     
-    // Mostrar mensagem de sucesso (que é a mesma para segurança)
+    // Mostrar mensagem de sucesso
     forgotPasswordMessage.classList.remove("error-message");
     forgotPasswordMessage.classList.add("success-message");
-    // CORREÇÃO: Mensagem mais clara após o envio
+    // Mensagem de sucesso
     forgotPasswordMessage.textContent = "Link de recuperação enviado! Verifique sua caixa de entrada.";
     forgotPasswordMessage.classList.add("show");
     

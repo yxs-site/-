@@ -148,8 +148,8 @@ exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email: email.toLowerCase() });
 
     if (!user) {
-      // Não revelar se o e-mail existe ou não (segurança)
-      return res.json({ message: 'Se o e-mail existir, um link de recuperação será enviado' });
+      // Alteração solicitada pelo usuário: retornar erro se o e-mail não for encontrado
+      return res.status(404).json({ error: 'E-mail não cadastrado' });
     }
 
     // Gerar token de reset
