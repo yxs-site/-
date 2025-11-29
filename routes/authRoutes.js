@@ -21,4 +21,7 @@ router.post('/change-password', authMiddleware, authController.changePassword);
 // Rota para excluir a conta (protegida)
 router.delete('/delete-account', authMiddleware, authController.deleteAccount);
 
+// Rota para atualizar a foto de perfil (protegida)
+router.post('/update-profile-picture', authMiddleware, authController.updateProfilePicture);
+
 module.exports = router;
