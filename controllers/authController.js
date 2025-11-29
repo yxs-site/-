@@ -382,3 +382,48 @@ exports.deleteAccount = async (req, res) => {
 
 
                                       
+
+// Atualizar foto de perfil
+exports.updateProfilePicture = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { profilePicture } = req.body;
+
+    // Validar se a foto foi fornecida
+    if (!profilePicture) {
+      return res.status(400).json({ error: 'Foto de perfil não fornecida' });
+    }
+
+    // Validar se é uma string base64 válida
+    if (typeof profilePicture !== 'string' || !profilePicture.startsWith('data:image')) {
+      return res.status(400).json({ error: 'Formato de imagem inválido' });
+    }
+
+    // Atualizar o usuário com a nova foto de perfil
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { profilePicture: profilePicture },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    console.log('✓ Foto de perfil atualizada:', userId);
+
+    res.json({
+      message: 'Foto de perfil atualizada com sucesso!',
+      user: {
+        id: updatedUser._id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        profilePicture: updatedUser.profilePicture
+      }
+    });
+  } catch (error) {
+    console.error('✗ Erro ao atualizar foto de perfil:', error.message);
+    res.status(500).json({ error: 'Erro ao atualizar foto de perfil' });
+  }
+};
+  
