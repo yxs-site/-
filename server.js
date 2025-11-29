@@ -23,8 +23,9 @@ app.use(cors({
     },
     credentials: true // Permite cookies e cabeçalhos de autorização
 }));
-app.use(express.json()); // Para parsear application/json
-app.use(express.urlencoded({ extended: true })); // Para parsear application/x-www-form-urlencoded
+// Aumentar o limite de tamanho do corpo da requisição para permitir upload de fotos de perfil
+app.use(express.json({ limit: '5mb' })); // Para parsear application/json (5MB)
+app.use(express.urlencoded({ extended: true, limit: '5mb' })); // Para parsear application/x-www-form-urlencoded (5MB)
 
 // Conexão com o MongoDB
 mongoose.connect(process.env.MONGO_URI)
