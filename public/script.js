@@ -1008,18 +1008,36 @@
   });
 
   // Splash Menu Toggle Handler
-  safe(splashMenuToggle, el => {
-    el.addEventListener('click', () => {
-      if (splashSidebarMenu) splashSidebarMenu.classList.add('active');
+  safe(spl    safe(splashMenuToggle, el => {
+      el.addEventListener('click', () => {
+        if (splashSidebarMenu) splashSidebarMenu.classList.add('active');
+        if (menuOverlay) menuOverlay.classList.add('active'); // Adiciona overlay
+      });
     });
-  });
 
-  // Splash Close Menu Handler
-  safe(splashCloseMenu, el => {
-    el.addEventListener('click', () => {
-      if (splashSidebarMenu) splashSidebarMenu.classList.remove('active');
+    safe(splashCloseMenu, el => {
+      el.addEventListener('click', () => {
+        if (splashSidebarMenu) splashSidebarMenu.classList.remove('active');
+        if (menuOverlay) menuOverlay.classList.remove('active'); // Remove overlay
+      });
     });
-  });
+
+    // Adiciona lógica para fechar o menu e o overlay ao clicar em um link
+    const splashNavLinks = document.querySelectorAll('#splash-sidebar-menu .splash-nav-link');
+    splashNavLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (splashSidebarMenu) splashSidebarMenu.classList.remove('active');
+        if (menuOverlay) menuOverlay.classList.remove('active');
+      });
+    });
+
+    // Adiciona lógica para fechar o menu e o overlay ao clicar no overlay
+    safe(menuOverlay, el => {
+      el.addEventListener('click', () => {
+        if (splashSidebarMenu) splashSidebarMenu.classList.remove('active');
+        if (menuOverlay) menuOverlay.classList.remove('active');
+      });
+    });;
 
   // Splash Nav Entrar
   safe(splashNavEntrar, el => {
