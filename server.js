@@ -105,10 +105,11 @@ io.on('connection', (socket) => {
         socket.join(roomCode);
         room.gameState = 'rolling';
 
-        io.to(roomCode).emit('player-joined', {
-            players: room.players,
-            gameState: room.gameState
-        });
+	        // Emitir 'player-joined' para a sala inteira (agora com 2 jogadores)
+	        io.to(roomCode).emit('player-joined', {
+	            players: room.players,
+	            gameState: room.gameState
+	        });
         console.log(`Jogador ${playerName} entrou na sala ${roomCode}`);
     });
 
@@ -156,34 +157,34 @@ io.on('connection', (socket) => {
         const player = room.players.find(p => p.id === socket.id);
         room.board[position] = player.symbol;
 
-        // Verificar vitória
-        const winner = checkWinner(room.board);
-        if (winner) {
-            room.gameState = 'finished';
-            room.winner = player.name;
-            io.to(roomCode).emit('game-finished', {
-                winner: player.name,
-                board: room.board,
-                gameState: room.gameState
-            });
-        } else if (room.board.every(cell => cell !== '')) {
-            room.gameState = 'finished';
-            room.winner = 'draw';
-            io.to(roomCode).emit('game-finished', {
-                winner: 'draw',
-                board: room.board,
-                gameState: room.gameState
-            });
-        } else {
-            // Trocar turno
-            const otherPlayer = room.players.find(p => p.id !== socket.id);
-            room.currentTurn = otherPlayer.id;
-            io.to(roomCode).emit('board-updated', {
-                board: room.board,
-                currentTurn: room.currentTurn,
-                currentPlayerName: otherPlayer.name
-            });
-        }
+	        // Verificar vitória
+	        const winner = checkWinner(room.board);
+	        if (winner) {
+	            room.gameState = 'finished';
+	            room.winner = player.name;
+	            io.to(roomCode).emit('game-finished', {
+	                winner: player.name,
+	                board: room.board,
+	                gameState: room.gameState
+	            });
+	        } else if (room.board.every(cell => cell !== '')) {
+	            room.gameState = 'finished';
+	            room.winner = 'draw';
+	            io.to(roomCode).emit('game-finished', {
+	                winner: 'draw',
+	                board: room.board,
+	                gameState: room.gameState
+	            });
+	        } else {
+	            // Trocar turno
+	            const otherPlayer = room.players.find(p => p.id !== socket.id);
+	            room.currentTurn = otherPlayer.id;
+	            io.to(roomCode).emit('board-updated', {
+	                board: room.board,
+	                currentTurn: room.currentTurn,
+	                currentPlayerName: otherPlayer.name
+	            });
+	        }
     });
 
     // Jogar de novo
@@ -211,20 +212,21 @@ io.on('connection', (socket) => {
 
         if (!room) return;
 
-        const player = room.players.find(p => p.id === socket.id);
-        io.to(roomCode).emit('player-left', {
-            playerName: player.name
-        });
-
-        room.players = room.players.filter(p => p.id !== socket.id);
-        playerSockets.delete(socket.id);
-        socket.leave(roomCode);
-
-        if (room.players.length === 0) {
-            gameRooms.delete(roomCode);
-        }
-
-        console.log(`Jogador saiu da sala ${roomCode}`);
+	        const player = room.players.find(p => p.id === socket.id);
+	        // Notificar a sala que um jogador saiu
+	        io.to(roomCode).emit('player-left', {
+	            playerName: player.name
+	        });
+	
+	        room.players = room.players.filter(p => p.id !== socket.id);
+	        playerSockets.delete(socket.id);
+	        socket.leave(roomCode);
+	
+	        if (room.players.length === 0) {
+	            gameRooms.delete(roomCode);
+	        }
+	
+	        console.log(`Jogador saiu da sala ${roomCode}`);
     });
 
     // Desconexão
@@ -277,4 +279,4 @@ if (require.main === module) {
     server.listen(PORT, () => {
         console.log(`Servidor rodando na porta ${PORT}`);
     });
-}
+                }
