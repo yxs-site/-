@@ -19,7 +19,7 @@
   const safe = (el, fn) => { if (el) fn(el); };
   const noop = () => {};
 
-  const API_URL = "https://yxs-site.onrender.com/"; // URL do seu backend
+  const API_URL = ""; // URL do seu backend
 
   // Safe querySelectorAll that returns empty NodeList if nothing
   const $$ = (selector) => document.querySelectorAll(selector) || [];
