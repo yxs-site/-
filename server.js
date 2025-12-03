@@ -41,12 +41,16 @@ app.use(express.json({ limit: '5mb' })); // Para parsear application/json (5MB)
 app.use(express.urlencoded({ extended: true, limit: '5mb' })); // Para parsear application/x-www-form-urlencoded (5MB)
 
 // Conexão com o MongoDB
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('Conectado ao MongoDB Atlas com sucesso!'))
-    .catch(err => {
-        console.error('Erro ao conectar ao MongoDB Atlas:', err.message);
-        process.exit(1); // Encerra a aplicação em caso de erro de conexão
-    });
+if (process.env.MONGO_URI) {
+    mongoose.connect(process.env.MONGO_URI)
+        .then(() => console.log('Conectado ao MongoDB Atlas com sucesso!'))
+        .catch(err => {
+            console.error('Erro ao conectar ao MongoDB Atlas:', err.message);
+            // Não encerra a aplicação, apenas registra o erro
+        });
+} else {
+    console.warn('MONGO_URI não configurado. Continuando sem banco de dados.');
+}
 
 // Servir arquivos estáticos do frontend (a pasta 'public')
 app.use(express.static(path.join(__dirname, 'public')));
