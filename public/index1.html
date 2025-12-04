@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> YXS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+</head>
+<body data-theme="dark">
+    <!-- Tela de Boas-vindas / Splash Screen -->
+    <div id="welcome-splash" class="screen welcome-splash active">
+        <!-- Navigation Bar for Splash -->
+        <div class="splash-navbar">
+            <div class="splash-navbar-content">
+                <h1 class="splash-navbar-title">YXS CLUBE</h1>
+                <button id="splash-menu-toggle" class="splash-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu for Splash -->
+        <div id="splash-sidebar-menu" class="splash-sidebar-menu">
+            <div class="splash-sidebar-header">
+                <h2>Menu</h2>
+                <button id="splash-close-menu" class="splash-close-menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="splash-sidebar-nav">
+                <a href="#" id="splash-nav-entrar" class="splash-nav-link">Entrar</a>
+                <a href="#" id="splash-nav-registrar" class="splash-nav-link">Cadastre-se</a>
+                <a href="#" id="splash-nav-theme-toggle" class="splash-nav-link">Modo Claro</a>
+                
+                <a href="https://wa.me/9185892191?text=preciso%20de%20suporte" target="_blank" class="splash-nav-link">Suporte</a>
+            </nav>
+        </div>
+
+        <div class="splash-background"></div>
+        <div class="splash-content">
+            <h1 class="splash-title">YXS CLUBE</h1>
+            <p class="splash-subtitle">bem vindo ao yxs clube</p>
+            <button id="btn-entrar" class="btn-entrar">ENTRAR</button>
+        </div>
+    </div>
+
+    <!-- Tela de Registro -->
+    <div id="register-screen" class="screen">
+        <!-- Navigation Bar -->
+        <div class="splash-navbar">
+            <div class="splash-navbar-content">
+                <h1 class="splash-navbar-title">YXS CLUBE</h1>
+                <button id="register-menu-toggle" class="splash-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <div id="register-sidebar-menu" class="splash-sidebar-menu">
+            <div class="splash-sidebar-header">
+                <h2>Menu</h2>
+                <button id="register-close-menu" class="splash-close-menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="splash-sidebar-nav">
+                <a href="#" id="register-nav-home" class="splash-nav-link">Início</a><a href="#" id="register-nav-entrar" class="splash-nav-link">Entrar</a>
+                <a href="#" id="register-nav-registrar" class="splash-nav-link">Registrar</a>
+                <a href="#" id="register-nav-theme-toggle" class="splash-nav-link">Modo Claro</a>
+                
+                <a href="https://wa.me/9185892191?text=preciso%20de%20suporte" target="_blank" class="splash-nav-link">Suporte</a>
+            </nav>
+        </div>
+        <div class="auth-container">
+            <h1 class="auth-title">Criar Conta</h1>
+            <a href="https://wa.me/9185892191?text=preciso%20de%20suporte" target="_blank" class="support-icon-auth" title="Suporte WhatsApp">
+                <i class="fas fa-headset"></i> Suporte
+            </a>
+            <form id="register-form">
+                <div class="form-group">
+                    <input type="text" id="username" name="username" placeholder="Nome de Usuário" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" placeholder="E-mail" required>
+                </div>
+                <div class="form-group password-group">
+                    <input type="password" id="password" name="password" placeholder="Senha" required>
+                    <i class="fas fa-eye toggle-password" data-target="password"></i>
+                </div>
+                <div class="form-group password-group">
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirmar Senha" required>
+                    <i class="fas fa-eye toggle-password" data-target="confirm-password"></i>
+                </div>
+                <button type="submit" class="btn-primary">Registrar</button>
+                <div id="error-message" class="error-message"></div>
+            </form>
+            <div class="switch-links">
+                <a href="#" id="switch-to-login" class="switch-link">Entrar Agora</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Tela de Login -->
+    <div id="login-screen" class="screen login-screen active">
+        <!-- Navigation Bar -->
+        <div class="splash-navbar">
+            <div class="splash-navbar-content">
+                <h1 class="splash-navbar-title">YXS CLUBE</h1>
+                <button id="login-menu-toggle" class="splash-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <div id="login-sidebar-menu" class="splash-sidebar-menu">
+            <div class="splash-sidebar-header">
+                <h2>Menu</h2>
+                <button id="login-close-menu" class="splash-close-menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="splash-sidebar-nav">
+                <a href="#" id="login-nav-home" class="splash-nav-link">Início</a><a href="#" id="login-nav-entrar" class="splash-nav-link">Entrar</a>
+                <a href="#" id="login-nav-registrar" class="splash-nav-link">Registrar</a>
+                <a href="#" id="login-nav-theme-toggle" class="splash-nav-link">Modo Claro</a>
+                
+                <a href="https://wa.me/9185892191?text=preciso%20de%20suporte" target="_blank" class="splash-nav-link">Suporte</a>
+            </nav>
+        </div>
+        <div class="auth-container">
+            <h1 class="auth-title">Login</h1>
+            <a href="https://wa.me/9185892191?text=preciso%20de%20suporte" target="_blank" class="support-icon-auth" title="Suporte WhatsApp">
+                <i class="fas fa-headset"></i> Suporte
+            </a>
+            <form id="login-form">
+                <div class="form-group">
+                    <input type="text" id="login-identifier" name="login-identifier" placeholder="Usuário/E-mail" required>
+                </div>
+                <div class="form-group password-group">
+                    <input type="password" id="login-password" name="login-password" placeholder="Senha" required>
+                    <i class="fas fa-eye toggle-password" data-target="login-password"></i>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="remember-me" name="remember-me">
+                    <label for="remember-me">Lembrar</label>
+                </div>
+                <button type="submit" class="btn-primary">Entrar</button>
+                <div id="login-error-message" class="error-message"></div>
+            </form>
+            <div class="switch-links">
+                <a href="#" id="switch-to-register" class="switch-link">Registrar</a>
+                <a href="#" id="switch-to-forgot-password" class="switch-link">Esqueci a Senha</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Tela de Esqueci a Senha -->
+    <div id="forgot-password-screen" class="screen">
+        <!-- Navigation Bar -->
+        <div class="splash-navbar">
+            <div class="splash-navbar-content">
+                <h1 class="splash-navbar-title">YXS CLUBE</h1>
+                <button id="forgot-menu-toggle" class="splash-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <div id="forgot-sidebar-menu" class="splash-sidebar-menu">
+            <div class="splash-sidebar-header">
+                <h2>Menu</h2>
+                <button id="forgot-close-menu" class="splash-close-menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="splash-sidebar-nav">
+                <a href="#" id="forgot-nav-home" class="splash-nav-link">Início</a><a href="#" id="forgot-nav-entrar" class="splash-nav-link">Entrar</a>
+                <a href="#" id="forgot-nav-registrar" class="splash-nav-link">Registrar</a>
+                <a href="#" id="forgot-nav-theme-toggle" class="splash-nav-link">Modo Claro</a>
+                
+                <a href="https://wa.me/9185892191?text=preciso%20de%20suporte" target="_blank" class="splash-nav-link">Suporte</a>
+            </nav>
+        </div>
+        <div class="auth-container">
+            <h1 class="auth-title">Esqueci a Senha</h1>
+            <a href="https://wa.me/9185892191?text=preciso%20de%20suporte" target="_blank" class="support-icon-auth" title="Suporte WhatsApp">
+                <i class="fas fa-headset"></i> Suporte
+            </a>
+            <form id="forgot-password-form">
+                <div class="form-group">
+                    <input type="email" id="forgot-password-email" name="forgot-password-email" placeholder="Seu E-mail" required>
+                </div>
+                <button type="submit" class="btn-primary">Enviar Link de Recuperação</button>
+                <div id="forgot-password-message" class="error-message"></div>
+            </form>
+            <div class="switch-links">
+                <a href="#" id="switch-to-login-from-forgot" class="switch-link">Voltar para Login</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Tela de Redefinição de Senha -->
+    <div id="reset-password-screen" class="screen">
+        <!-- Navigation Bar -->
+        <div class="splash-navbar">
+            <div class="splash-navbar-content">
+                <h1 class="splash-navbar-title">YXS CLUBE</h1>
+                <button id="reset-menu-toggle" class="splash-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <div id="reset-sidebar-menu" class="splash-sidebar-menu">
+            <div class="splash-sidebar-header">
+                <h2>Menu</h2>
+                <button id="reset-close-menu" class="splash-close-menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="splash-sidebar-nav">
+                <a href="#" id="reset-nav-home" class="splash-nav-link">Início</a><a href="#" id="reset-nav-entrar" class="splash-nav-link">Entrar</a>
+                <a href="#" id="reset-nav-registrar" class="splash-nav-link">Registrar</a>
+                <a href="#" id="reset-nav-theme-toggle" class="splash-nav-link">Modo Claro</a>
+                
+                <a href="https://wa.me/9185892191?text=preciso%20de%20suporte" target="_blank" class="splash-nav-link">Suporte</a>
+            </nav>
+        </div>
+        <div class="auth-container">
+            <h1 class="auth-title">Redefinir Senha</h1>
+            <a href="https://wa.me/9185892191?text=preciso%20de%20suporte" target="_blank" class="support-icon-auth" title="Suporte WhatsApp">
+                <i class="fas fa-headset"></i> Suporte
+            </a>
+            <form id="reset-password-form">
+                <div class="form-group">
+                    <input type="email" id="reset-email" name="reset-email" placeholder="Seu E-mail" disabled>
+                </div>
+                <div class="form-group password-group">
+                    <input type="password" id="reset-new-password" name="reset-new-password" placeholder="Sua Nova Senha" required>
+                    <i class="fas fa-eye toggle-password" data-target="reset-new-password"></i>
+                </div>
+                <div class="form-group password-group">
+                    <input type="password" id="reset-confirm-password" name="reset-confirm-password" placeholder="Confirme Sua Nova Senha" required>
+                    <i class="fas fa-eye toggle-password" data-target="reset-confirm-password"></i>
+                </div>
+                <button type="submit" class="btn-primary">Redefinir Senha</button>
+                <div id="reset-password-message" class="error-message"></div>
+            </form>
+            <div class="switch-links">
+                <a href="#" id="switch-to-login-from-reset" class="switch-link">Voltar para Login</a>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <!-- Tela de Boas-vindas / Dashboard -->
+    <div id="welcome-screen" class="screen">
+        <!-- Menu de Navegação (Hamburger) -->
+        <!-- Menu de Navegação (Hamburger) -->
+        <div class="navbar">
+            <div class="navbar-content">
+                <h1 class="navbar-title"> YXS</h1>
+                <button id="menu-toggle" class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Overlay -->
+        <div id="menu-overlay" class="menu-overlay"></div>
+
+        <!-- Menu Lateral -->
+        <div id="sidebar-menu" class="sidebar-menu">
+            <div class="sidebar-header">
+                <h2>Menu</h2>
+                <button id="close-menu" class="close-menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" id="nav-home" class="nav-link active" data-target="home-page">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="#" id="nav-perfil" class="nav-link" data-target="perfil-page">
+                    <i class="fas fa-user"></i> Perfil
+                </a>
+                <a href="#" id="nav-games" class="nav-link" data-target="games-page">
+                    <i class="fas fa-gamepad"></i> Jogos
+                </a>
+
+                <a href="#" id="nav-chat" class="nav-link" data-target="chat-page">
+                    <i class="fas fa-comments"></i> Chat
+                </a>
+                <a href="#" id="nav-configuracoes" class="nav-link" data-target="configuracoes-page">
+                    <i class="fas fa-cog"></i> Configurações
+                </a>
+                <a href="#" id="nav-sair" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </a>
+            </nav>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-content">
+            <!-- Página de Home -->
+            <div id="home-page" class="page active">
+                <div class="page-header">
+                    <h1>Bem-vindo(a) ao  YXS!</h1>
+                </div>
+                <div class="page-content">
+                    <p>Use o menu no canto superior direito para navegar entre as seções.</p>
+                    <p>Aqui você encontrará as últimas novidades e informações importantes.</p>
+                </div>
+            </div>
+
+            <!-- Página de Perfil -->
+            <div id="perfil-page" class="page">
+                <div class="page-header">
+                    <h1>Meu Perfil</h1>
+                </div>
+                <div class="perfil-container">
+                    <div class="profile-picture-section">
+                        <div class="profile-picture-circle" id="profile-picture-circle">
+                            <img id="profile-img" src="" alt="Foto de Perfil" style="display: none;">
+                            <div id="profile-placeholder" class="profile-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="upload-btn-overlay">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <input type="file" id="profile-pic-input" accept="image/*" style="display: none;">
+                        </div>
+                        <p id="profile-hint" class="profile-hint">Toque para escolher ou remover foto</p>
+                        
+                        <!-- Menu de opções da foto -->
+                        <div id="profile-pic-menu" class="profile-pic-menu" style="display: none;">
+                            <div class="profile-pic-menu-content">
+                                <button id="btn-choose-photo" class="profile-pic-menu-option">
+                                    <i class="fas fa-image"></i> Escolher foto
+                                </button>
+                                <button id="btn-remove-photo" class="profile-pic-menu-option">
+                                    <i class="fas fa-trash-alt"></i> Remover foto
+                                </button>
+                                <button id="btn-cancel-photo-menu" class="profile-pic-menu-option cancel">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <div class="info-group">
+                            <label>Nome:</label>
+                            <p id="profile-name">Carregando...</p>
+                        </div>
+                        <div class="info-group">
+                            <label>E-mail:</label>
+                            <p id="profile-email">Carregando...</p>
+                        </div>
+                        <div id="profile-message" class="profile-message" style="display: none;"></div>
+                    </div>
+                    <div class="profile-actions">
+                        <button id="btn-alterar-senha" class="btn-secondary">
+                            <i class="fas fa-key"></i> Alterar Senha
+                        </button>
+                        <button id="btn-excluir-conta" class="btn-danger">
+                            <i class="fas fa-trash"></i> Excluir Conta
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página de Jogos -->
+            <div id="games-page" class="page">
+                <div class="page-header">
+                    <h1>Jogos</h1>
+                </div>
+                <div class="page-content games-list">
+<div id="tictactoe-card" class="game-card">
+	                        <img src="assets/images/tictactoe.jpg" alt="Jogo da Velha" class="game-image">
+	                        <h2>Jogo da Velha</h2>
+	                        <p>Desafie seus amigos em tempo real!</p>
+	                        <a href="jogodavelha.html" class="btn-primary">Jogar</a>
+	                    </div>
+<div id="cacapalavras-card" class="game-card">
+	                        <img src="assets/images/wordsearch.jpg" alt="Caça-Palavras" class="game-image">
+	                        <h2>Caça-Palavras</h2>
+	                        <p>Encontre as palavras escondidas no tabuleiro!</p>
+	                        <button id="btn-open-cacapalavras" class="btn-primary">Jogar</button>
+	                    </div>
+                </div>
+            </div>
+
+            <!-- Página do Jogo da Velha -->
+            <div id="tictactoe-page" class="page">
+                <div class="page-header">
+                    <h1>Jogo da Velha</h1>
+                </div>
+                <div class="game-container">
+                    <!-- Informações dos Jogadores -->
+                    <div class="player-info-container">
+                        <div id="player-self-info" class="player-info self">
+                            <img id="player-self-img" src="" alt="Você" class="player-avatar">
+                            <p id="player-self-name" class="player-name">Você</p>
+                            <p id="player-self-symbol" class="player-symbol"></p>
+                        </div>
+                        <div id="player-opponent-info" class="player-info opponent">
+                            <img id="player-opponent-img" src="" alt="Oponente" class="player-avatar">
+                            <p id="player-opponent-name" class="player-name">Oponente</p>
+                            <p id="player-opponent-symbol" class="player-symbol"></p>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo do Jogo (Lobby, Dados, Tabuleiro) -->
+                    <div class="game-content">
+                        <!-- Lobby -->
+                        <div id="tictactoe-lobby" class="game-section active">
+                            <h3>Lobby</h3>
+                            <div class="lobby-actions">
+                                <button id="btn-create-room" class="btn-primary">Criar Sala</button>
+                                <button id="btn-join-room-open" class="btn-secondary">Entrar em Sala</button>
+                            </div>
+                            <div id="join-room-form" style="display: none;">
+                                <input type="text" id="room-code-input" placeholder="Código da Sala" maxlength="6">
+                                <button id="btn-join-room" class="btn-primary">Entrar</button>
+                            </div>
+                            <p id="lobby-message" class="info-message"></p>
+                        </div>
+
+                        <!-- Tela de Espera -->
+                        <div id="tictactoe-waiting" class="game-section" style="display: none;">
+                            <h3>Aguardando Jogador...</h3>
+                            <p>Código da Sala: <strong id="waiting-room-code"></strong></p>
+                            <p id="waiting-message">Compartilhe o código com seu amigo.</p>
+                            <button id="btn-cancel-wait" class="btn-danger">Cancelar</button>
+                        </div>
+
+                        <!-- Tela de Dados -->
+                        <div id="tictactoe-dice-roll" class="game-section" style="display: none;">
+                            <h3>Rolar o Dado</h3>
+                            <p>Quem tirar o maior número começa!</p>
+                            <div class="dice-area">
+                                <div id="player-dice" class="dice">?</div>
+                                <div id="opponent-dice" class="dice">?</div>
+                            </div>
+                            <p id="dice-message"></p>
+                            <button id="btn-roll-dice" class="btn-primary">Rolar Dado</button>
+                        </div>
+
+                        <!-- Tela de Jogo -->
+                        <div id="tictactoe-game" class="game-section" style="display: none;">
+                            <h3 id="game-status">Seu Turno</h3>
+                            <div class="tictactoe-board">
+                                <div class="cell" data-index="0"></div>
+                                <div class="cell" data-index="1"></div>
+                                <div class="cell" data-index="2"></div>
+                                <div class="cell" data-index="3"></div>
+                                <div class="cell" data-index="4"></div>
+                                <div class="cell" data-index="5"></div>
+                                <div class="cell" data-index="6"></div>
+                                <div class="cell" data-index="7"></div>
+                                <div class="cell" data-index="8"></div>
+                            </div>
+                            <p id="game-info"></p>
+                            <div class="game-actions">
+                                <button id="btn-play-again" class="btn-secondary" style="display: none;">Jogar de Novo</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="btn-leave-game" class="btn-danger full-width">Sair da Sala</button>
+                </div>
+            </div>
+
+            <!-- Modal de Alteração de Senha -->
+                <div id="modal-alterar-senha" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Alterar Senha</h2>
+                            <button class="modal-close" data-modal="modal-alterar-senha">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <form id="form-alterar-senha">
+                            <div class="form-group">
+                                <label for="current-password">Senha Atual:</label>
+                                <div class="password-group">
+                                    <input type="password" id="current-password" name="current-password" placeholder="Digite sua senha atual" required>
+                                    <i class="fas fa-eye toggle-password" data-target="current-password"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-password">Nova Senha:</label>
+                                <div class="password-group">
+                                    <input type="password" id="new-password" name="new-password" placeholder="Digite sua nova senha" required>
+                                    <i class="fas fa-eye toggle-password" data-target="new-password"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-new-password">Confirmar Nova Senha:</label>
+                                <div class="password-group">
+                                    <input type="password" id="confirm-new-password" name="confirm-new-password" placeholder="Confirme sua nova senha" required>
+                                    <i class="fas fa-eye toggle-password" data-target="confirm-new-password"></i>
+                                </div>
+                            </div>
+                            <div id="alterar-senha-message" class="error-message"></div>
+                            <button type="submit" class="btn-primary">Alterar Senha</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Modal de Corte de Foto -->
+                <div id="modal-crop-foto" class="modal">
+                    <div class="modal-content modal-crop-content">
+                        <div class="modal-header">
+                            <h2>Ajustar Foto de Perfil</h2>
+                            <button class="modal-close" data-modal="modal-crop-foto">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="crop-container">
+                                <img id="crop-image" src="" alt="Imagem para cortar">
+                            </div>
+                            <div class="crop-controls">
+                                <button id="btn-zoom-in" class="btn-crop-control" title="Aumentar zoom">
+                                    <i class="fas fa-search-plus"></i>
+                                </button>
+                                <button id="btn-zoom-out" class="btn-crop-control" title="Diminuir zoom">
+                                    <i class="fas fa-search-minus"></i>
+                                </button>
+                                <button id="btn-rotate-left" class="btn-crop-control" title="Girar à esquerda">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                                <button id="btn-rotate-right" class="btn-crop-control" title="Girar à direita">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                                <button id="btn-reset-crop" class="btn-crop-control" title="Resetar">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="btn-cancelar-crop" class="btn-secondary">Cancelar</button>
+                            <button id="btn-salvar-crop" class="btn-primary">Salvar Foto</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de Confirmação de Exclusão -->
+                <div id="modal-excluir-conta" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Excluir Conta</h2>
+                            <button class="modal-close" data-modal="modal-excluir-conta">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Tem certeza que deseja excluir sua conta? Esta ação é irreversível e todos os seus dados serão perdidos.</p>
+                            <div class="form-group password-group">
+                                <label for="excluir-senha">Confirme sua senha:</label>
+                                <input type="password" id="excluir-senha" name="excluir-senha" placeholder="Digite sua senha" required>
+                                <i class="fas fa-eye toggle-password" data-target="excluir-senha"></i>
+                            </div>
+                            <div id="excluir-conta-message" class="error-message"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="btn-cancelar-exclusao" class="btn-secondary">Cancelar</button>
+                            <button id="btn-confirmar-exclusao" class="btn-danger">Excluir Conta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página de Jogos -->
+            <div id="jogos-page" class="page">
+                <div class="page-header">
+                    <h1>Jogos</h1>
+                </div>
+                <div class="page-content">
+                    <p>Seção de Jogos em desenvolvimento...</p>
+                </div>
+            </div>
+
+            <!-- Página de Chat -->
+            <div id="chat-page" class="page">
+                <div class="page-header">
+                    <h1>Chat</h1>
+                </div>
+                <div class="page-content">
+                    <p>Seção de Chat em desenvolvimento...</p>
+                </div>
+            </div>
+
+            <!-- Página de Configurações -->
+            <div id="configuracoes-page" class="page">
+                <div class="page-header">
+                    <h1>Configurações</h1>
+                </div>
+                <div class="configuracoes-container">
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3>Modo Escuro</h3>
+                                <p>Alternar entre modo claro e escuro</p>
+                            </div>
+                            <div class="setting-control">
+                                <button id="theme-toggle" class="theme-toggle-switch">
+                                    <span class="toggle-slider"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <a href="https://wa.me/9185892191?text=preciso%20de%20suporte" target="_blank" class="setting-item support-link">
+                            <div class="setting-info">
+                                <h3>Suporte WhatsApp</h3>
+                                <p>Fale conosco para tirar dúvidas ou resolver problemas.</p>
+                            </div>
+                            <div class="setting-control">
+                                <i class="fab fa-whatsapp fa-2x" style="color: #25D366;"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay para fechar menu -->
+        <div id="menu-overlay" class="menu-overlay"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+                                
