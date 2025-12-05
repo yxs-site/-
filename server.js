@@ -58,6 +58,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Rotas de API (serão adicionadas em breve)
 // Rotas de API
 app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/scores', require('./routes/scoreRoutes'));
 
 // Rota de fallback para o frontend (SPA - Single Page Application)
 app.get('/', (req, res) => {

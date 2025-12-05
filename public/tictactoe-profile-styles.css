@@ -1,0 +1,246 @@
+/* ========================================
+   TICTACTOE PROFILE PICTURE STYLES
+   ======================================== */
+
+/* Estilos para as células do tabuleiro com fotos */
+.tictactoe-board .cell {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
+
+.tictactoe-board .cell .profile-pic-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+}
+
+.tictactoe-board .cell .profile-pic-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+.tictactoe-board .cell .player-symbol {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #667eea;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para o cabeçalho do jogador com foto */
+.player-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.player-info:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.player-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #667eea;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    display: none;
+}
+
+.player-avatar.active {
+    display: block;
+}
+
+.player-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: white;
+}
+
+.player-symbol {
+    font-size: 0.9rem;
+    color: #b0b0b0;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Animações para fotos de perfil */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.player-avatar.active {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Estilos para o container de informações dos jogadores */
+.player-info-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.player-info.self {
+    border-color: rgba(102, 126, 234, 0.3);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.player-info.opponent {
+    border-color: rgba(118, 75, 162, 0.3);
+    background: rgba(118, 75, 162, 0.05);
+}
+
+/* Placeholder para jogador sem foto */
+.player-placeholder {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    border: 3px solid #667eea;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 768px) {
+    .player-info-container {
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .player-info {
+        padding: 0.75rem;
+        gap: 0.5rem;
+    }
+
+    .player-avatar {
+        width: 50px;
+        height: 50px;
+        border-width: 2px;
+    }
+
+    .player-name {
+        font-size: 1rem;
+    }
+
+    .player-symbol {
+        font-size: 0.85rem;
+    }
+
+    .tictactoe-board .cell .player-symbol {
+        font-size: 2rem;
+    }
+
+    .player-placeholder {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+        border-width: 2px;
+    }
+}
+
+@media (max-width: 480px) {
+    .player-info-container {
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .player-info {
+        padding: 0.5rem;
+        gap: 0.25rem;
+    }
+
+    .player-avatar {
+        width: 45px;
+        height: 45px;
+        border-width: 2px;
+    }
+
+    .player-name {
+        font-size: 0.9rem;
+    }
+
+    .player-symbol {
+        font-size: 0.75rem;
+    }
+
+    .tictactoe-board .cell .player-symbol {
+        font-size: 1.5rem;
+    }
+
+    .player-placeholder {
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+        border-width: 2px;
+    }
+}
+
+/* ========================================
+   DARK MODE ADJUSTMENTS
+   ======================================== */
+
+[data-theme="dark"] .player-info {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .player-info:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="light"] .player-info {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #000;
+}
+
+[data-theme="light"] .player-info:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .player-name {
+    color: #000;
+}
+
+[data-theme="light"] .player-symbol {
+    color: #666;
+}
+
+[data-theme="light"] .tictactoe-board .cell .player-symbol {
+    color: #667eea;
+}

@@ -1,0 +1,530 @@
+<!-- Seção de Home Melhorada com Destaque para Jogos -->
+<div id="home-page-improved" class="page active">
+    <div class="home-header">
+        <div class="home-banner">
+            <h1 class="home-title">Bem-vindo ao YXS CLUBE! 🎮</h1>
+            <p class="home-subtitle">Divirta-se com nossos incríveis jogos</p>
+        </div>
+    </div>
+
+    <div class="home-content">
+        <!-- Seção de Jogos em Destaque -->
+        <section class="games-showcase">
+            <h2 class="section-title">Nossos Jogos</h2>
+            <div class="games-grid">
+                <!-- Card Jogo da Velha -->
+                <div class="game-showcase-card tictactoe-showcase">
+                    <div class="game-card-header">
+                        <div class="game-icon">
+                            <i class="fas fa-th"></i>
+                        </div>
+                        <h3>Jogo da Velha</h3>
+                    </div>
+                    <div class="game-card-body">
+                        <p class="game-description">Desafie seus amigos em tempo real! Teste sua estratégia em um clássico que nunca sai de moda.</p>
+                        <div class="game-features">
+                            <span class="feature-badge">
+                                <i class="fas fa-users"></i> Multiplayer
+                            </span>
+                            <span class="feature-badge">
+                                <i class="fas fa-bolt"></i> Rápido
+                            </span>
+                        </div>
+                    </div>
+                    <div class="game-card-footer">
+                        <a href="jogodavelha.html" class="btn-game-play">
+                            <i class="fas fa-play"></i> Jogar Agora
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card Caça-Palavras -->
+                <div class="game-showcase-card cacapalavras-showcase">
+                    <div class="game-card-header">
+                        <div class="game-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Caça-Palavras</h3>
+                    </div>
+                    <div class="game-card-body">
+                        <p class="game-description">Encontre as palavras escondidas no tabuleiro! Um desafio emocionante para exercitar sua mente.</p>
+                        <div class="game-features">
+                            <span class="feature-badge">
+                                <i class="fas fa-brain"></i> Desafiador
+                            </span>
+                            <span class="feature-badge">
+                                <i class="fas fa-star"></i> Pontuação
+                            </span>
+                        </div>
+                    </div>
+                    <div class="game-card-footer">
+                        <button id="btn-open-cacapalavras-home" class="btn-game-play">
+                            <i class="fas fa-play"></i> Jogar Agora
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Estatísticas do Usuário -->
+        <section class="user-stats-section">
+            <h2 class="section-title">Suas Estatísticas</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h4>Pontuação Total</h4>
+                        <p id="total-score-display" class="stat-value">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h4>Jogos Jogados</h4>
+                        <p id="games-played-display" class="stat-value">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h4>Sequência</h4>
+                        <p id="streak-display" class="stat-value">0</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Dicas -->
+        <section class="tips-section">
+            <h2 class="section-title">Dicas e Novidades</h2>
+            <div class="tips-container">
+                <div class="tip-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <h4>Dica do Dia</h4>
+                    <p>Quanto mais rápido você encontrar as palavras no Caça-Palavras, maior será sua pontuação!</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-star"></i>
+                    <h4>Novidade</h4>
+                    <p>Agora você pode ver suas fotos de perfil no Jogo da Velha! Personalize sua experiência.</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-users"></i>
+                    <h4>Comunidade</h4>
+                    <p>Convide seus amigos para jogar e compita no ranking global!</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<style>
+/* ========================================
+   HOME PAGE IMPROVED STYLES
+   ======================================== */
+
+.home-header {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem 1rem;
+    text-align: center;
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.home-banner {
+    color: white;
+}
+
+.home-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.home-subtitle {
+    font-size: 1.1rem;
+    margin: 0;
+    opacity: 0.95;
+    font-weight: 300;
+}
+
+.home-content {
+    padding: 0 1rem 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ========================================
+   GAMES SHOWCASE SECTION
+   ======================================== */
+
+.games-showcase {
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--color-text);
+    text-align: center;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.game-showcase-card {
+    background: var(--color-card-bg);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-showcase-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    border-color: #667eea;
+}
+
+.game-showcase-card.tictactoe-showcase {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+}
+
+.game-showcase-card.cacapalavras-showcase {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(56, 142, 60, 0.1) 100%);
+}
+
+.game-card-header {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 2px solid var(--color-input-border);
+}
+
+.game-icon {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    color: white;
+}
+
+.game-card-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--color-text);
+}
+
+.game-card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.game-description {
+    margin: 0 0 1rem 0;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.game-features {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.feature-badge {
+    background: var(--color-input-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--color-input-border);
+}
+
+.game-card-footer {
+    padding: 1.5rem;
+    border-top: 2px solid var(--color-input-border);
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-game-play {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.btn-game-play:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-game-play:active {
+    transform: scale(0.98);
+}
+
+/* ========================================
+   USER STATS SECTION
+   ======================================== */
+
+.user-stats-section {
+    margin-bottom: 3rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card {
+    background: var(--color-card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-input-border);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-content h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+/* ========================================
+   TIPS SECTION
+   ======================================== */
+
+.tips-section {
+    margin-bottom: 2rem;
+}
+
+.tips-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.tip-card {
+    background: var(--color-card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-input-border);
+    transition: all 0.3s ease;
+}
+
+.tip-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.tip-card i {
+    font-size: 2.5rem;
+    color: #667eea;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.tip-card h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.1rem;
+    color: var(--color-text);
+}
+
+.tip-card p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 768px) {
+    .home-title {
+        font-size: 1.8rem;
+    }
+
+    .home-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .games-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tips-container {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-header {
+        padding: 1.5rem 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .home-title {
+        font-size: 1.5rem;
+    }
+
+    .home-content {
+        padding: 0 0.75rem 1.5rem 0.75rem;
+    }
+
+    .game-card-header {
+        padding: 1rem;
+    }
+
+    .game-card-body {
+        padding: 1rem;
+    }
+
+    .game-card-footer {
+        padding: 1rem;
+    }
+
+    .stat-card {
+        gap: 1rem;
+    }
+
+    .stat-icon {
+        font-size: 1.5rem;
+        width: 45px;
+        height: 45px;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+    }
+}
+
+/* ========================================
+   DARK MODE ADJUSTMENTS
+   ======================================== */
+
+[data-theme="dark"] .game-showcase-card {
+    background: var(--color-card-bg);
+}
+
+[data-theme="dark"] .game-showcase-card.tictactoe-showcase {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+}
+
+[data-theme="dark"] .game-showcase-card.cacapalavras-showcase {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(56, 142, 60, 0.08) 100%);
+}
+
+[data-theme="light"] .game-showcase-card {
+    background: var(--color-card-bg);
+}
+
+[data-theme="light"] .game-showcase-card.tictactoe-showcase {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+}
+
+[data-theme="light"] .game-showcase-card.cacapalavras-showcase {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(56, 142, 60, 0.05) 100%);
+}
+</style>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> YXS</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="profile-stats-styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
 </head>
@@ -369,6 +370,56 @@
                         </div>
                         <div id="profile-message" class="profile-message" style="display: none;"></div>
                     </div>
+                    
+                    <!-- Seção de Estatísticas de Jogos -->
+                    <div class="profile-stats-section">
+                        <h3>Suas Estatísticas de Jogos</h3>
+                        <div class="stats-container">
+                            <!-- Caça-Palavras -->
+                            <div class="game-stat-card">
+                                <div class="stat-header">
+                                    <i class="fas fa-search"></i>
+                                    <h4>Caça-Palavras</h4>
+                                </div>
+                                <div class="stat-body">
+                                    <div class="stat-item">
+                                        <span class="stat-label">Pontuação Total:</span>
+                                        <span id="profile-caca-score" class="stat-value">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Jogo da Velha -->
+                            <div class="game-stat-card">
+                                <div class="stat-header">
+                                    <i class="fas fa-th"></i>
+                                    <h4>Jogo da Velha</h4>
+                                </div>
+                                <div class="stat-body">
+                                    <div class="stat-item">
+                                        <span class="stat-label">Vitórias:</span>
+                                        <span id="profile-tictactoe-wins" class="stat-value">0</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Derrotas:</span>
+                                        <span id="profile-tictactoe-losses" class="stat-value">0</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Empates:</span>
+                                        <span id="profile-tictactoe-ties" class="stat-value">0</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Total de Jogos:</span>
+                                        <span id="profile-total-games" class="stat-value">0</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Melhor Sequência:</span>
+                                        <span id="profile-best-streak" class="stat-value">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="profile-actions">
                         <button id="btn-alterar-senha" class="btn-secondary">
                             <i class="fas fa-key"></i> Alterar Senha
@@ -641,6 +692,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="script.js"></script>
+    <script src="home-script.js"></script>
+    <script src="profile-stats-script.js"></script>
+    <script src="tictactoe-profile-integration.js"></script>
 </body>
 </html>
                                 

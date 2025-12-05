@@ -22,6 +22,35 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: '' // URL da foto de perfil
     },
+    // Campos de Pontuação e Estatísticas
+    cacaPalavrasScore: {
+        type: Number,
+        default: 0 // Pontuação total do Caça-Palavras
+    },
+    tictactoeWins: {
+        type: Number,
+        default: 0 // Vitórias no Jogo da Velha
+    },
+    tictactoeLosses: {
+        type: Number,
+        default: 0 // Derrotas no Jogo da Velha
+    },
+    tictactoeTies: {
+        type: Number,
+        default: 0 // Empates no Jogo da Velha
+    },
+    totalGamesPlayed: {
+        type: Number,
+        default: 0 // Total de jogos jogados
+    },
+    currentStreak: {
+        type: Number,
+        default: 0 // Sequência atual de vitórias
+    },
+    bestStreak: {
+        type: Number,
+        default: 0 // Melhor sequência de vitórias
+    },
     // Campo para recuperação de senha
     resetToken: String,
     resetTokenExpiry: Date

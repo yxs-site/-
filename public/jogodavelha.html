@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jogo da Velha - Tutyxs 3.0</title>
+  <link rel="stylesheet" href="tictactoe-profile-styles.css">
   <style>
     * {
       margin: 0;
@@ -1858,14 +1859,15 @@ function confirmOfflineNames() {
 	    // Botão voltar para o site (Comportamento idêntico ao caca-palavras.html)
 	    const backToSiteBtn = document.getElementById('backToSiteBtn');
 	    if (backToSiteBtn) {
-	      backToSiteBtn.addEventListener('click', () => {
-	        window.close();
-	        // Se window.close() não funcionar (algumas restrições de navegador), redireciona
-	        setTimeout(() => {
-	          window.location.href = '/index.html';
-	        }, 100);
-	      });
-	    }
-	  </script>
+      backToSiteBtn.addEventListener('click', () => {
+        window.close();
+        // Se window.close() não funcionar (algumas restrições de navegador), redireciona
+        setTimeout(() => {
+          window.location.href = '/index.html';
+        }, 100);
+      });
+    }
+  </script>
+  <script src="tictactoe-profile-integration.js"></script>
 </body>
 </html>
