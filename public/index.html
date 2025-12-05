@@ -316,12 +316,127 @@
         <div class="main-content">
             <!-- Página de Home -->
             <div id="home-page" class="page active">
-                <div class="page-header">
-                    <h1>Bem-vindo(a) ao  YXS!</h1>
+                <div class="home-header">
+                    <div class="home-banner">
+                        <h1 class="home-title">Bem-vindo ao YXS CLUBE! 🎮</h1>
+                        <p class="home-subtitle">Divirta-se com nossos incríveis jogos</p>
+                    </div>
                 </div>
-                <div class="page-content">
-                    <p>Use o menu no canto superior direito para navegar entre as seções.</p>
-                    <p>Aqui você encontrará as últimas novidades e informações importantes.</p>
+
+                <div class="home-content">
+                    <!-- Seção de Jogos em Destaque -->
+                    <section class="games-showcase">
+                        <h2 class="section-title">Nossos Jogos</h2>
+                        <div class="games-grid">
+                            <!-- Card Jogo da Velha -->
+                            <div class="game-showcase-card tictactoe-showcase">
+                                <div class="game-card-header">
+                                    <div class="game-icon">
+                                        <i class="fas fa-th"></i>
+                                    </div>
+                                    <h3>Jogo da Velha</h3>
+                                </div>
+                                <div class="game-card-body">
+                                    <p class="game-description">Desafie seus amigos em tempo real! Teste sua estratégia em um clássico que nunca sai de moda.</p>
+                                    <div class="game-features">
+                                        <span class="feature-badge">
+                                            <i class="fas fa-users"></i> Multiplayer
+                                        </span>
+                                        <span class="feature-badge">
+                                            <i class="fas fa-bolt"></i> Rápido
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="game-card-footer">
+                                    <a href="jogodavelha.html" class="btn-game-play">
+                                        <i class="fas fa-play"></i> Jogar Agora
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Card Caça-Palavras -->
+                            <div class="game-showcase-card cacapalavras-showcase">
+                                <div class="game-card-header">
+                                    <div class="game-icon">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                    <h3>Caça-Palavras</h3>
+                                </div>
+                                <div class="game-card-body">
+                                    <p class="game-description">Encontre as palavras escondidas no tabuleiro! Um desafio emocionante para exercitar sua mente.</p>
+                                    <div class="game-features">
+                                        <span class="feature-badge">
+                                            <i class="fas fa-brain"></i> Desafiador
+                                        </span>
+                                        <span class="feature-badge">
+                                            <i class="fas fa-star"></i> Pontuação
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="game-card-footer">
+                                    <button id="btn-open-cacapalavras-home" class="btn-game-play">
+                                        <i class="fas fa-play"></i> Jogar Agora
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Seção de Estatísticas do Usuário -->
+                    <section class="user-stats-section">
+                        <h2 class="section-title">Suas Estatísticas</h2>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h4>Pontuação Total</h4>
+                                    <p id="total-score-display" class="stat-value">0</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-gamepad"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h4>Jogos Jogados</h4>
+                                    <p id="games-played-display" class="stat-value">0</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h4>Sequência</h4>
+                                    <p id="streak-display" class="stat-value">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Seção de Dicas -->
+                    <section class="tips-section">
+                        <h2 class="section-title">Dicas e Novidades</h2>
+                        <div class="tips-container">
+                            <div class="tip-card">
+                                <i class="fas fa-lightbulb"></i>
+                                <h4>Dica do Dia</h4>
+                                <p>Quanto mais rápido você encontrar as palavras no Caça-Palavras, maior será sua pontuação!</p>
+                            </div>
+                            <div class="tip-card">
+                                <i class="fas fa-star"></i>
+                                <h4>Novidade</h4>
+                                <p>Agora você pode ver suas fotos de perfil no Jogo da Velha! Personalize sua experiência.</p>
+                            </div>
+                            <div class="tip-card">
+                                <i class="fas fa-users"></i>
+                                <h4>Comunidade</h4>
+                                <p>Convide seus amigos para jogar e compita no ranking global!</p>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
 
