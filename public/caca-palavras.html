@@ -1288,14 +1288,12 @@ function voltarMenu() {
 	      if (foundWords.length === selectedWords.length) {
 	        if (winGame) winGame.play(); // Toca o som de vitória
 	        const pointsGained = 10 * currentGameLevel;
-        score += pointsGained;
-        saveScore();
-        updateScore();
-        // NEW: Salvar pontuação no backend
-        if (window.opener && window.opener.__App && window.opener.__App.saveCacaPalavrasScore) {
-          window.opener.__App.saveCacaPalavrasScore(pointsGained);
-        }
-        showWinScreen(currentGameLevel, pointsGained);
+	        score += pointsGained;
+	        saveScore();
+	        updateScore();
+	        // NEW: Salvar pontuação no backend
+	        saveCacaPalavrasScore(pointsGained);
+	        showWinScreen(currentGameLevel, pointsGained);
 	        currentGameLevel++; // Incrementa o nível DEPOIS de mostrar a tela de vitória
 	      }
     }
@@ -1676,9 +1674,57 @@ function avancar10s() {
 
 
     // Sons estão em arquivos musica1.mp3, musica2.mp3, musica3.mp3, success.mp3, fail.mp3, bolha.mp3
-    // Para testar som bolha: if (popSound) popSound.play();
-
-  </script>
+	  // Para testar som bolha: if (popSound) popSound.play();
+	
+	  <script>
+	    // ========================================
+	    // Funções de Integração com a API
+	    // ========================================
+	
+	    /**
+	     * Obter token JWT do localStorage
+	     */
+	    function getAuthToken() {
+	        return localStorage.getItem('authToken');
+	    }
+	
+	    /**
+	     * Enviar a pontuação do Caça-Palavras para o backend
+	     * @param {number} score - Pontuação a ser adicionada
+	     */
+	    async function saveCacaPalavrasScore(score) {
+	        const token = getAuthToken();
+	        if (!token) {
+	            console.warn('Usuário não autenticado. Pontuação não será salva no servidor.');
+	            return;
+	        }
+	
+	        const API_URL = ''; // Assumindo que a API está no mesmo domínio
+	
+	        try {
+	            const response = await fetch(`${API_URL}/api/scores/update-caca-palavras-score`, {
+	                method: 'POST',
+	                headers: {
+	                    'Content-Type': 'application/json',
+	                    'Authorization': `Bearer ${token}`
+	                },
+	                body: JSON.stringify({ score: score })
+	            });
+	
+	            if (!response.ok) {
+	                const errorData = await response.json();
+	                throw new Error(errorData.message || 'Erro ao salvar pontuação no servidor');
+	            }
+	
+	            const data = await response.json();
+	            console.log('Pontuação salva com sucesso:', data);
+	        } catch (error) {
+	            console.error('Erro ao salvar pontuação:', error);
+	        }
+	    }
+	  </script>
+	
+	  </script>
 
   <!-- Tela de Conclusão Profissional -->
   <div id="winScreen" class="win-screen-overlay">
