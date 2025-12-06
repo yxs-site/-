@@ -991,35 +991,7 @@
 
   // Toggle eye icons already attached above
 
-  // Pull to refresh: keep as-is but safe
-  let pullStartY = 0,
-    pullMoveY = 0,
-    pullDistance = 0;
-  const PULL_THRESHOLD = 100;
-  document.addEventListener("touchstart", (e) => {
-    if (window.scrollY === 0) {
-      pullStartY = e.touches[0].screenY;
-    }
-  });
-  document.addEventListener(
-    "touchmove",
-    (e) => {
-      if (pullStartY) {
-        pullMoveY = e.touches[0].screenY;
-        pullDistance = pullMoveY - pullStartY;
-        if (pullDistance > 0) {
-          e.preventDefault();
-        }
-      }
-    },
-    { passive: false }
-  );
-  document.addEventListener("touchend", () => {
-    if (pullDistance > PULL_THRESHOLD) window.location.reload();
-    pullStartY = 0;
-    pullMoveY = 0;
-    pullDistance = 0;
-  });
+  // Funcionalidade de Pull to Refresh removida para evitar recarregamento indesejado ao rolar para cima.
 
   // Hide all pages except home on load
   pages.forEach((page) => {
