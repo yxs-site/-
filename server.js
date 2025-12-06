@@ -5,6 +5,7 @@ const path = require('path');
 const cors = require('cors'); // Adicionado: Importar o módulo cors
 const http = require('http');
 const socketIO = require('socket.io');
+const { setSocketIO, addUserSocket, removeUserSocket } = require('./utils/socketManager');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,8 @@ const io = socketIO(server, {
         methods: ['GET', 'POST']
     }
 });
+
+setSocketIO(io);
 
 // Armazenar salas e jogadores
 const gameRooms = new Map();
@@ -71,6 +74,12 @@ module.exports = app;
 // Socket.IO - Gerenciamento de Salas e Jogo da Velha
 io.on('connection', (socket) => {
     console.log(`Novo jogador conectado: ${socket.id}`);
+
+    // Mapear socket ao userId após a autenticação do cliente
+    socket.on('user-connected', (userId) => {
+        addUserSocket(userId, socket.id);
+        console.log(`Usuário ${userId} conectado com socket ${socket.id}`);
+    });
 
     // Criar uma nova sala
     socket.on('create-room', (playerName) => {
@@ -254,6 +263,12 @@ io.on('connection', (socket) => {
             playerSockets.delete(socket.id);
         }
         console.log(`Jogador desconectado: ${socket.id}`);
+    });
+
+    // Evento para remover o mapeamento de socket do usuário (o cliente deve enviar isso no logout)
+    socket.on('user-disconnected', (userId) => {
+        removeUserSocket(userId, socket.id);
+        console.log(`Usuário ${userId} desconectado do socket ${socket.id}`);
     });
 });
 

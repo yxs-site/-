@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const { sendPasswordResetEmail, sendWelcomeEmail, sendResetConfirmationEmail } = require('../utils/emailService');
+const { getSocketIO, getUserSockets } = require('../utils/socketManager');
 
 // Registrar novo usuário
 exports.register = async (req, res) => {
@@ -404,10 +405,26 @@ exports.updateProfilePicture = async (req, res) => {
       userId,
       { profilePicture: profilePicture },
       { new: true }
-    );
+    ).select('-password -resetToken -resetTokenExpiry'); // Adicionado .select para retornar o objeto limpo
 
     if (!updatedUser) {
       return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    // EMITIR EVENTO SOCKET.IO PARA ATUALIZAR CLIENTES CONECTADOS
+    try {
+      const io = getSocketIO();
+      const userSockets = getUserSockets(userId);
+      
+      userSockets.forEach(socketId => {
+        io.to(socketId).emit('profile-picture-updated', {
+          userId: updatedUser._id,
+          profilePicture: updatedUser.profilePicture
+        });
+      });
+      console.log(`✓ Evento 'profile-picture-updated' emitido para ${userSockets.size} sockets do usuário ${userId}`);
+    } catch (e) {
+      console.warn(`⚠ Não foi possível emitir evento Socket.IO: ${e.message}`);
     }
 
     console.log('✓ Foto de perfil atualizada:', userId);
