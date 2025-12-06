@@ -1288,10 +1288,14 @@ function voltarMenu() {
 	      if (foundWords.length === selectedWords.length) {
 	        if (winGame) winGame.play(); // Toca o som de vitória
 	        const pointsGained = 10 * currentGameLevel;
-	        score += pointsGained;
-	        saveScore();
-	        updateScore();
-	        showWinScreen(currentGameLevel, pointsGained);
+        score += pointsGained;
+        saveScore();
+        updateScore();
+        // NEW: Salvar pontuação no backend
+        if (window.opener && window.opener.__App && window.opener.__App.saveCacaPalavrasScore) {
+          window.opener.__App.saveCacaPalavrasScore(pointsGained);
+        }
+        showWinScreen(currentGameLevel, pointsGained);
 	        currentGameLevel++; // Incrementa o nível DEPOIS de mostrar a tela de vitória
 	      }
     }

@@ -221,6 +221,79 @@
     if (menuOverlay) menuOverlay.classList.remove("active");
   }
 
+  async function fetchStats(token) {
+    try {
+      const res = await fetch(`${API_URL}/api/scores/user-stats`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Erro ao carregar estatísticas.");
+      }
+
+      const stats = await res.json();
+      
+      // Atualizar elementos da página de perfil
+      safe($("profile-caca-score"), (el) => el.textContent = stats.cacaPalavrasScore || 0);
+      safe($("profile-tictactoe-wins"), (el) => el.textContent = stats.tictactoeWins || 0);
+      safe($("profile-tictactoe-losses"), (el) => el.textContent = stats.tictactoeLosses || 0);
+      safe($("profile-tictactoe-ties"), (el) => el.textContent = stats.tictactoeTies || 0);
+      safe($("profile-total-games"), (el) => el.textContent = stats.totalGamesPlayed || 0);
+      safe($("profile-best-streak"), (el) => el.textContent = stats.bestStreak || 0);
+
+      // Atualizar elementos da página Home (se existirem)
+      safe($("total-score-display"), (el) => el.textContent = stats.cacaPalavrasScore || 0);
+      safe($("games-played-display"), (el) => el.textContent = stats.totalGamesPlayed || 0);
+      safe($("streak-display"), (el) => el.textContent = stats.currentStreak || 0);
+
+    } catch (err) {
+      console.error("Erro ao buscar estatísticas:", err.message || err);
+      // Opcional: Mostrar mensagem de erro na tela
+    }
+  }
+
+  async function saveCacaPalavrasScore(score) {
+    let storedUser = null;
+    try {
+      storedUser = JSON.parse(localStorage.getItem("cardYXSUser"));
+    } catch (e) {
+      storedUser = null;
+    }
+
+    if (!storedUser || !storedUser.token) {
+      console.warn("Usuário não autenticado. Não é possível salvar a pontuação.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/api/scores/update-caca-palavras-score`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedUser.token}`,
+        },
+        body: JSON.stringify({ score }),
+      });
+
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        throw new Error(d.message || "Erro ao salvar pontuação no backend");
+      }
+
+      const data = await res.json();
+      console.log("Pontuação do Caça-Palavras salva com sucesso:", data.newScore);
+      // Opcional: Atualizar a pontuação na UI após o salvamento
+      fetchStats(storedUser.token);
+
+    } catch (err) {
+      console.error("Erro ao salvar pontuação:", err.message || err);
+    }
+  }
+
   function loadProfileData() {
     let stored = null;
     try {
@@ -244,6 +317,9 @@
         profileImg.style.display = "none";
         if (profilePlaceholder) profilePlaceholder.style.display = "flex";
       }
+
+      // NEW: Fetch user stats
+      fetchStats(stored.token);
 
       // Show main/welcome if exists
       if (welcomeScreen && loginScreen) {
@@ -1249,5 +1325,6 @@
     logout,
     loadProfileData,
     applyTheme,
+    saveCacaPalavrasScore,
   };
 })();
