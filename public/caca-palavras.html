@@ -544,28 +544,28 @@
 
   <div id="difficulty" class="hidden">
     <h2>Escolha a Dificuldade</h2>
-    <button onclick="setDifficulty('facil')">Fácil</button>
-    <button onclick="setDifficulty('medio')">Médio</button>
-    <button onclick="setDifficulty('dificil')">Difícil</button>
+    <button id="facilBtn" data-level="facil">Fácil</button>
+    <button id="medioBtn" data-level="medio">Médio</button>
+    <button id="dificilBtn" data-level="dificil">Difícil</button>
   </div>
 
   <div id="themes" class="hidden">
     <h2>Escolha o Tema</h2>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; max-width: 800px; margin: 20px auto; padding: 0 20px;">
-      <button onclick="startGame('Tecnologia')">Tecnologia</button>
-      <button onclick="startGame('Animais')">Animais</button>
-      <button onclick="startGame('Escola')">Escola</button>
-      <button onclick="startGame('Frutas')">Frutas</button>
-      <button onclick="startGame('Espaço')">Espaço</button>
-      <button onclick="startGame('Países')">Países</button>
-      <button onclick="startGame('Cores')">Cores</button>
-      <button onclick="startGame('Esportes')">Esportes</button>
-      <button onclick="startGame('Profissões')">Profissões</button>
-      <button onclick="startGame('Objetos')">Objetos</button>
-      <button onclick="startGame('Natureza')">Natureza</button>
-      <button onclick="startGame('Alimentos')">Alimentos</button>
-      <button onclick="startGame('Bebidas')">Bebidas</button>
-      <button onclick="startGame('Insetos')">Insetos</button>
+      <button data-theme="Tecnologia">Tecnologia</button>
+      <button data-theme="Animais">Animais</button>
+      <button data-theme="Escola">Escola</button>
+      <button data-theme="Frutas">Frutas</button>
+      <button data-theme="Espaço">Espaço</button>
+      <button data-theme="Países">Países</button>
+      <button data-theme="Cores">Cores</button>
+      <button data-theme="Esportes">Esportes</button>
+      <button data-theme="Profissões">Profissões</button>
+      <button data-theme="Objetos">Objetos</button>
+      <button data-theme="Natureza">Natureza</button>
+      <button data-theme="Alimentos">Alimentos</button>
+      <button data-theme="Bebidas">Bebidas</button>
+      <button data-theme="Insetos">Insetos</button>
     </div>
   </div>
 
@@ -788,20 +788,40 @@ colorThemeBtn.classList.add('hidden');
       loadScore();
     };
 
-	    function setDifficulty(level) {
-	  if (popSound) popSound.play(); // Som toca ao clicar nos botões de dificuldade
-	  difficultyDiv.classList.add('hidden');
-	  themesDiv.classList.remove('hidden');
-	  currentLevel = level;
-	  // Limpa a grade
-	  gridDiv.innerHTML = '';
-	}
+function handleDifficultyClick(level) {
+		  if (popSound) popSound.play(); // Som toca ao clicar nos botões de dificuldade
+		  difficultyDiv.classList.add('hidden');
+		  themesDiv.classList.remove('hidden');
+		  currentLevel = level;
+		  // Limpa a grade
+		  gridDiv.innerHTML = '';
+		}
 
 
 
 
      
 window.addEventListener('DOMContentLoaded', () => {
+  // Adiciona event listeners para os botões de dificuldade
+  document.querySelectorAll('#difficulty button').forEach(button => {
+    button.addEventListener('click', (e) => {
+      const level = e.target.dataset.level;
+      handleDifficultyClick(level);
+      // Adiciona a classe 'clicked' para o botão clicado e remove dos outros
+      document.querySelectorAll('#difficulty button').forEach(btn => btn.classList.remove('clicked'));
+      e.target.classList.add('clicked');
+    });
+  });
+
+  // Adiciona event listeners para os botões de tema
+  document.querySelectorAll('#themes button').forEach(button => {
+    button.addEventListener('click', (e) => {
+      const theme = e.target.dataset.theme;
+      startGame(theme);
+    });
+  });
+
+
   // Controle do pop-up de boas-vindas
   const welcomePopup = document.getElementById('welcomePopup');
   const closePopup = document.getElementById('closePopup');
@@ -1472,36 +1492,7 @@ function resetGameForNextLevel() {
 		      }
 		    });
 
-// Adiciona event listeners para os botões de tema e dificuldade
-// O problema é que esses listeners não estavam sendo adicionados no escopo correto ou no momento certo.
-// Vamos adicioná-los aqui, fora do DOMContentLoaded, mas garantindo que os elementos existam.
 
-// Botões de Dificuldade
-document.getElementById('facilBtn').addEventListener('click', () => {
-  currentLevel = 'facil';
-  document.getElementById('facilBtn').classList.add('clicked');
-  document.getElementById('medioBtn').classList.remove('clicked');
-  document.getElementById('dificilBtn').classList.remove('clicked');
-});
-
-document.getElementById('medioBtn').addEventListener('click', () => {
-  currentLevel = 'medio';
-  document.getElementById('facilBtn').classList.remove('clicked');
-  document.getElementById('medioBtn').classList.add('clicked');
-  document.getElementById('dificilBtn').classList.remove('clicked');
-});
-
-document.getElementById('dificilBtn').addEventListener('click', () => {
-  currentLevel = 'dificil';
-  document.getElementById('facilBtn').classList.remove('clicked');
-  document.getElementById('medioBtn').classList.remove('clicked');
-  document.getElementById('dificilBtn').classList.add('clicked');
-});
-
-// Botões de Tema
-document.getElementById('tema1Btn').addEventListener('click', () => startGame('tema1'));
-document.getElementById('tema2Btn').addEventListener('click', () => startGame('tema2'));
-document.getElementById('tema3Btn').addEventListener('click', () => startGame('tema3'));
 
     // Botão para mostrar/esconder catálogo de músicas
     trocarMusicaBtn.addEventListener('click', () => {
