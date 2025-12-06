@@ -46,6 +46,22 @@ router.post('/update-caca-palavras-score', authMiddleware, async (req, res) => {
             { new: true }
         ).select('cacaPalavrasScore');
 
+        // EMITIR EVENTO SOCKET.IO PARA ATUALIZAR CLIENTES CONECTADOS
+        try {
+            const io = require('../utils/socketManager').getSocketIO();
+            const userSockets = require('../utils/socketManager').getUserSockets(req.userId);
+            
+            userSockets.forEach(socketId => {
+                io.to(socketId).emit('stats-updated', {
+                    userId: req.userId,
+                    cacaPalavrasScore: user.cacaPalavrasScore
+                });
+            });
+            console.log(`✓ Evento 'stats-updated' (Caça-Palavras) emitido para ${userSockets.size} sockets do usuário ${req.userId}`);
+        } catch (e) {
+            console.warn(`⚠ Não foi possível emitir evento Socket.IO: ${e.message}`);
+        }
+
         res.json({
             message: 'Pontuação atualizada com sucesso',
             newScore: user.cacaPalavrasScore
@@ -69,32 +85,31 @@ router.post('/update-tictactoe-result', authMiddleware, async (req, res) => {
 
         if (result === 'win') {
             updateData.$inc.tictactoeWins = 1;
-            updateData.$inc.currentStreak = 1;
         } else if (result === 'loss') {
             updateData.$inc.tictactoeLosses = 1;
-            updateData.$inc.currentStreak = 0;
         } else if (result === 'tie') {
             updateData.$inc.tictactoeTies = 1;
-            updateData.$inc.currentStreak = 0;
         }
 
         const user = await User.findById(req.userId);
 
-        // Atualizar melhor sequência se necessário
         // A lógica de streak é complexa e deve ser feita antes do update
         let newBestStreak = user.bestStreak;
-        let newCurrentStreak = user.currentStreak;
+        let newCurrentStreak;
 
         if (result === 'win') {
-            newCurrentStreak += 1;
+            newCurrentStreak = user.currentStreak + 1;
             if (newCurrentStreak > newBestStreak) {
                 newBestStreak = newCurrentStreak;
             }
         } else if (result === 'loss' || result === 'tie') {
             newCurrentStreak = 0;
+        } else {
+            // Caso inesperado, manter o valor atual
+            newCurrentStreak = user.currentStreak;
         }
 
-        // Adicionar a atualização da melhor sequência ao updateData
+        // Adicionar a atualização da melhor sequência e da sequência atual ao updateData
         updateData.$set = { bestStreak: newBestStreak, currentStreak: newCurrentStreak };
 
         const updatedUser = await User.findByIdAndUpdate(
@@ -103,17 +118,38 @@ router.post('/update-tictactoe-result', authMiddleware, async (req, res) => {
             { new: true }
         ).select('tictactoeWins tictactoeLosses tictactoeTies totalGamesPlayed currentStreak bestStreak');
 
-        res.json({
-            message: 'Resultado registrado com sucesso',
-            stats: {
-                wins: updatedUser.tictactoeWins,
-                losses: updatedUser.tictactoeLosses,
-                ties: updatedUser.tictactoeTies,
-                totalGamesPlayed: updatedUser.totalGamesPlayed,
-                currentStreak: updatedUser.currentStreak,
-                bestStreak: updatedUser.bestStreak
+            // EMITIR EVENTO SOCKET.IO PARA ATUALIZAR CLIENTES CONECTADOS
+            try {
+                const io = require('../utils/socketManager').getSocketIO();
+                const userSockets = require('../utils/socketManager').getUserSockets(req.userId);
+                
+                userSockets.forEach(socketId => {
+                    io.to(socketId).emit('stats-updated', {
+                        userId: req.userId,
+                        tictactoeWins: updatedUser.tictactoeWins,
+                        tictactoeLosses: updatedUser.tictactoeLosses,
+                        tictactoeTies: updatedUser.tictactoeTies,
+                        totalGamesPlayed: updatedUser.totalGamesPlayed,
+                        currentStreak: updatedUser.currentStreak,
+                        bestStreak: updatedUser.bestStreak
+                    });
+                });
+                console.log(`✓ Evento 'stats-updated' (Jogo da Velha) emitido para ${userSockets.size} sockets do usuário ${req.userId}`);
+            } catch (e) {
+                console.warn(`⚠ Não foi possível emitir evento Socket.IO: ${e.message}`);
             }
-        });
+
+            res.json({
+                message: 'Resultado registrado com sucesso',
+                stats: {
+                    wins: updatedUser.tictactoeWins,
+                    losses: updatedUser.tictactoeLosses,
+                    ties: updatedUser.tictactoeTies,
+                    totalGamesPlayed: updatedUser.totalGamesPlayed,
+                    currentStreak: updatedUser.currentStreak,
+                    bestStreak: updatedUser.bestStreak
+                }
+            });
     } catch (error) {
         console.error('Erro ao atualizar resultado:', error);
         res.status(500).json({ message: 'Erro ao atualizar resultado' });
