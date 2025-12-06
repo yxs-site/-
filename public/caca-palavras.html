@@ -779,7 +779,7 @@ if (savedWallpaper) {
     let lastCellCoords = null;
 
     // Inicia jogo - abre seleção de dificuldade
-    startBtn.onclick = () => {
+    startBtn.addEventListener('click', () => {
       if (popSound) popSound.play();
       startBtn.classList.add('hidden');
       welcome.classList.add('hidden');
@@ -807,13 +807,15 @@ window.addEventListener('DOMContentLoaded', () => {
   const closePopup = document.getElementById('closePopup');
   const music = document.getElementById('music');
 
-	  // Fechar pop-up e iniciar música
-	  closePopup.onclick = () => {
-	    welcomePopup.classList.add('hidden');
-	    if (music) {
-	      music.play().catch(err => console.log('Erro ao reproduzir música:', err));
-	    }
-	  };
+// Fechar pop-up e iniciar música
+		  if (closePopup) {
+		    closePopup.addEventListener('click', () => {
+		      welcomePopup.classList.add('hidden');
+		      if (music) {
+		        music.play().catch(err => console.log('Erro ao reproduzir música:', err));
+		      }
+		    });
+		  }
 	
 	  // Lógica da playlist
 	  music.addEventListener('ended', () => {
@@ -932,9 +934,10 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   // Associa eventos aos botões agora que o DOM está carregado
-  document.getElementById('btnVoltar').onclick = voltar10s;
-  document.getElementById('btnAvancar').onclick = avancar10s;
-  document.getElementById('togglePlayBtn').onclick = togglePlayPause;
+  document.getElementById('btnVoltar').addEventListener('click', voltar10s);
+  
+  document.getElementById('btnAvancar').addEventListener('click', avancar10s);
+  document.getElementById('togglePlayBtn').addEventListener('click', togglePlayPause);
 
   // Disponibiliza a função search globalmente para o botão Buscar funcionar com onclick direto
   window.search = search;
@@ -1359,19 +1362,29 @@ function showWinScreen(levelCompleted, pointsGained) {
 
   winMessage.textContent = `Você completou o Nível ${levelCompleted} e ganhou ${pointsGained} pontos!`;
 
-  // Remove ouvintes antigos para evitar duplicação
-  nextLevelBtn.onclick = null;
-  backToMenuBtn.onclick = null;
+// Remove ouvintes antigos para evitar duplicação
+	  // (Não é necessário remover se os handlers forem criados a cada chamada de showWinScreen)
+	
+	  const nextLevelHandler = () => {
+	    winScreen.classList.remove('visible');
+	    resetGameForNextLevel();
+	    nextLevelBtn.removeEventListener('click', nextLevelHandler);
+	    backToMenuBtn.removeEventListener('click', backToMenuHandler);
+	  };
+	
+	  const backToMenuHandler = () => {
+	    winScreen.classList.remove('visible');
+	    voltarMenu();
+	    nextLevelBtn.removeEventListener('click', nextLevelHandler);
+	    backToMenuBtn.removeEventListener('click', backToMenuHandler);
+	  };
+	
+	  nextLevelBtn.addEventListener('click', nextLevelHandler);
+	  backToMenuBtn.addEventListener('click', backToMenuHandler);
 
-  // Adiciona novos ouvintes
-  nextLevelBtn.onclick = () => {
-    winScreen.classList.remove('visible');
-    resetGameForNextLevel();
-  };
 
-  backToMenuBtn.onclick = () => {
-    winScreen.classList.remove('visible');
-    voltarMenu();
+
+
   };
 
   // Exibe a tela
@@ -1449,7 +1462,7 @@ function resetGameForNextLevel() {
 }
 
     // Botão para pausar e tocar música
-	    musicBtn.onclick = () => {
+	    musicBtn.addEventListener('click', () => {
 	      if (music.paused) {
 	        music.play().catch(err => console.log('Erro ao reproduzir música:', err));
 	        musicBtn.textContent = "Pausar Música";
@@ -1460,7 +1473,7 @@ function resetGameForNextLevel() {
 	    };
 
     // Botão para mostrar/esconder catálogo de músicas
-    trocarMusicaBtn.onclick = () => {
+    trocarMusicaBtn.addEventListener('click', () => {
       if (catalogoMusicas.classList.contains('hidden')) {
         catalogoMusicas.classList.remove('hidden');
       } else {
