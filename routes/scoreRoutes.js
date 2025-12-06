@@ -81,9 +81,21 @@ router.post('/update-tictactoe-result', authMiddleware, async (req, res) => {
         const user = await User.findById(req.userId);
 
         // Atualizar melhor sequência se necessário
-        if (user.currentStreak + 1 > user.bestStreak) {
-            updateData.$set = { bestStreak: user.currentStreak + 1 };
+        // A lógica de streak é complexa e deve ser feita antes do update
+        let newBestStreak = user.bestStreak;
+        let newCurrentStreak = user.currentStreak;
+
+        if (result === 'win') {
+            newCurrentStreak += 1;
+            if (newCurrentStreak > newBestStreak) {
+                newBestStreak = newCurrentStreak;
+            }
+        } else if (result === 'loss' || result === 'tie') {
+            newCurrentStreak = 0;
         }
+
+        // Adicionar a atualização da melhor sequência ao updateData
+        updateData.$set = { bestStreak: newBestStreak, currentStreak: newCurrentStreak };
 
         const updatedUser = await User.findByIdAndUpdate(
             req.userId,
