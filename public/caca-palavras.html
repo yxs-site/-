@@ -1461,16 +1461,47 @@ function resetGameForNextLevel() {
   createGrid();
 }
 
-    // Botão para pausar e tocar música
-	    musicBtn.addEventListener('click', () => {
-	      if (music.paused) {
-	        music.play().catch(err => console.log('Erro ao reproduzir música:', err));
-	        musicBtn.textContent = "Pausar Música";
-	      } else {
-	        music.pause();
-	        musicBtn.textContent = "Tocar Música";
-	      }
-	    };
+// Botão para pausar e tocar música
+		    musicBtn.addEventListener('click', () => {
+		      if (music.paused) {
+		        music.play().catch(err => console.log('Erro ao reproduzir música:', err));
+		        musicBtn.textContent = "Pausar Música";
+		      } else {
+		        music.pause();
+		        musicBtn.textContent = "Tocar Música";
+		      }
+		    });
+
+// Adiciona event listeners para os botões de tema e dificuldade
+// O problema é que esses listeners não estavam sendo adicionados no escopo correto ou no momento certo.
+// Vamos adicioná-los aqui, fora do DOMContentLoaded, mas garantindo que os elementos existam.
+
+// Botões de Dificuldade
+document.getElementById('facilBtn').addEventListener('click', () => {
+  currentLevel = 'facil';
+  document.getElementById('facilBtn').classList.add('clicked');
+  document.getElementById('medioBtn').classList.remove('clicked');
+  document.getElementById('dificilBtn').classList.remove('clicked');
+});
+
+document.getElementById('medioBtn').addEventListener('click', () => {
+  currentLevel = 'medio';
+  document.getElementById('facilBtn').classList.remove('clicked');
+  document.getElementById('medioBtn').classList.add('clicked');
+  document.getElementById('dificilBtn').classList.remove('clicked');
+});
+
+document.getElementById('dificilBtn').addEventListener('click', () => {
+  currentLevel = 'dificil';
+  document.getElementById('facilBtn').classList.remove('clicked');
+  document.getElementById('medioBtn').classList.remove('clicked');
+  document.getElementById('dificilBtn').classList.add('clicked');
+});
+
+// Botões de Tema
+document.getElementById('tema1Btn').addEventListener('click', () => startGame('tema1'));
+document.getElementById('tema2Btn').addEventListener('click', () => startGame('tema2'));
+document.getElementById('tema3Btn').addEventListener('click', () => startGame('tema3'));
 
     // Botão para mostrar/esconder catálogo de músicas
     trocarMusicaBtn.addEventListener('click', () => {
@@ -1478,8 +1509,8 @@ function resetGameForNextLevel() {
         catalogoMusicas.classList.remove('hidden');
       } else {
         catalogoMusicas.classList.add('hidden');
-      }
-    };
+	      }
+	    });
 
 	    function trocarMusica(musica) {
 	      music.pause();
