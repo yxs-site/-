@@ -191,7 +191,7 @@
             btnCacaPalavrasHome.addEventListener('click', function(e) {
                 e.preventDefault();
                 // Abrir Caça-Palavras em nova aba ou modal
-                window.open('caca-palavras.html', '_blank');
+                window.location.href = 'caca-palavras.html';
             });
         }
 
