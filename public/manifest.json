@@ -2,7 +2,7 @@
   "name": "YXS CLUBE",
   "short_name": "YXS",
   "start_url": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#000000",
   "theme_color": "#000000",
   "icons": [
