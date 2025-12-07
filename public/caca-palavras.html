@@ -644,7 +644,8 @@
   <audio id="bubbleSound" src="bolha.mp3"></audio>
   <audio id="popSound" src="pop.mp3"></audio>
 
-  <script>
+
+    document.addEventListener('DOMContentLoaded', () => {
     const wordsByTheme = {
       'Tecnologia': [
         'APP', 'CLOUD', 'JAVA', 'HTML', 'LINUX', 'SENHA', 'ROBOT', 'WIFI', 'DADOS', 'CODIGO',
@@ -746,21 +747,21 @@ if (savedWallpaper) {
     const gameArea = document.getElementById('gameArea');
     const wordListDiv = document.getElementById('wordList');
     const gridDiv = document.getElementById('grid');
-    const music = document.getElementById('music');
+    const music = document.getElementById('audioPlayer');
     const playlist = ['fundo.mp3', 'fundo2.mp3', 'fundo3.mp3', 'fundo4.mp3'];
     let currentTrackIndex = 0;
 
-    const wordFound = document.getElementById('wordFound');
-    const winGame = document.getElementById('winGame');
-    const fail = document.getElementById('fail');
+    const wordFound = new Audio('word.mp3');
+    const winGame = new Audio('Win.mp3');
+    const fail = new Audio('pop.mp3');
     const musicBtn = document.getElementById('musicBtn');
     const scoreEl = document.getElementById('score');
 
     const levelEl = document.getElementById('level');
     const trocarMusicaBtn = document.getElementById('trocarMusicaBtn');
     const catalogoMusicas = document.getElementById('catalogoMusicas');
-    const bubbleSound = document.getElementById('bubbleSound');
-    const popSound = document.getElementById('popSound');
+    const bubbleSound = new Audio('pop.mp3');
+    const popSound = new Audio('pop.mp3');
 
 
     let grid = [];
@@ -778,6 +779,16 @@ if (savedWallpaper) {
     let startCell = null;
     let lastCellCoords = null;
 
+    function loadScore() {
+      const saved = localStorage.getItem('caçaPalavrasScore');
+      if (saved !== null) {
+        score = parseInt(saved, 10);
+      } else {
+        score = 0;
+      }
+      updateScore();
+    }
+
     // Inicia jogo - abre seleção de dificuldade
     startBtn.addEventListener('click', () => {
       if (popSound) popSound.play();
@@ -786,7 +797,7 @@ if (savedWallpaper) {
 colorThemeBtn.classList.add('hidden');
       difficultyDiv.classList.remove('hidden');
       loadScore();
-    };
+    });
 
 function handleDifficultyClick(level) {
 		  if (popSound) popSound.play(); // Som toca ao clicar nos botões de dificuldade
@@ -825,7 +836,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // Controle do pop-up de boas-vindas
   const welcomePopup = document.getElementById('welcomePopup');
   const closePopup = document.getElementById('closePopup');
-  const music = document.getElementById('music');
+
 
 // Fechar pop-up e iniciar música
 		  if (closePopup) {
@@ -849,7 +860,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
   const audioPlayer = document.getElementById('audioPlayer');
   const playerUI = document.getElementById('playerUI');
-  const musicaAtual = document.getElementById('musicaAtual');
+  const musicBtn = document.getElementById('musicBtn');ual');
   const tempoAtual = document.getElementById('tempoAtual');
   const progressBar = document.getElementById('progressBar');
   const togglePlayBtn = document.getElementById('togglePlayBtn');
@@ -980,15 +991,7 @@ function voltarMenu() {
       levelEl.textContent = `Nível ${currentGameLevel}`;
     }
 
-    function loadScore() {
-      const saved = localStorage.getItem('caçaPalavrasScore');
-      if (saved !== null) {
-        score = parseInt(saved, 10);
-      } else {
-        score = 0;
-      }
-      updateScore();
-    }
+
 
     function saveScore() {
       localStorage.setItem('caçaPalavrasScore', score);
@@ -1757,9 +1760,10 @@ function avancar10s() {
 	            console.error('Erro ao salvar pontuação:', error);
 	        }
 	    }
-	  </script>
+
 	
-	  </script>
+	});
+  </script>
 
   <!-- Tela de Conclusão Profissional -->
   <div id="winScreen" class="win-screen-overlay">
