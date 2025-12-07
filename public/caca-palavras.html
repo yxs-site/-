@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Caça-Palavras Tutyxs 3.0</title>
+  <style>
+    body {
+      background: #1a1a1a;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 40px;
+      overflow: hidden; /* Remove o scroll vertical */
+    }
+    h1, h2 {
+      font-size: 2rem;
+      margin: 1rem 0;
+    }
+
+    button {
+      padding: 15px 25px;
+      margin: 10px 5px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      background: #6200ea;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+      user-select: none;
+    }
+
+    button:hover {
+      background: #3700b3;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .word-section {
+      margin-top: 10px;
+      position: relative;
+      padding-top: 50px;
+    }
+
+	.centralizado {
+	  display: flex;
+	  justify-content: center;
+	  margin-top: 10px;
+	  width: 100%;
+	}
+
+    .word-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+
+    .word-list {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .word-list span {
+      background: #444;
+      padding: 5px 10px;
+      border-radius: 5px;
+      user-select: none;
+    }
+
+    .word-list .found {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+
+.card {
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #333;
+  margin: 10px auto;
+  padding: 5px;
+  max-width: 300px;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.card p {
+  margin: 5px 0 0;
+  font-size: 1rem;
+  color: white;
+}
+
+.card.clicked {
+  border: 2px solid #00f;
+  box-shadow: 0 0 12px rgba(0, 0, 255, 0.5);
+}
+
+
+
+	    .grid {
+	  display: grid;
+	  gap: 4px;
+	  justify-content: center;
+		  background-color: #333; /* Fundo cinza escuro restaurado */
+		  padding: 15px; /* Padding para o fundo */
+		  margin: 0 auto;
+	  z-index: 1;
+	  position: relative;
+	  user-select: none;
+	  touch-action: none;
+	  max-width: fit-content;
+	  width: fit-content;
+	  border-radius: 8px;
+	}
+    .cell {
+      width: 38px;
+      height: 38px;
+      background: #444;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      border-radius: 5px;
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .selected {
+      background-color: #240046 !important;
+    }
+
+    .correct {
+      background-color: #000080;
+    }
+
+    #gameButtons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      flex-wrap: wrap;
+    }
+
+
+
+   #musicBtn {
+  background: #333;
+  padding: 8px 16px;
+  font-size: 1.3rem;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  color: white;
+  transition: background 0.3s;
+
+  visibility: hidden; /* 👈 Isso torna o botão invisível */
+}
+
+    #musicBtn:hover {
+      background: #555;
+    }
+
+
+
+    #score {
+      position: fixed;
+      top: 8px;
+      right: 8px;
+      font-size: 1rem;
+      background: #240046;
+      padding: 6px 5px;
+      border-radius: 8px;
+      user-select: none;
+      z-index: 1000;
+      display: none;
+      color: white;
+    }
+
+        #backToSiteBtn {
+            position: fixed;
+            top: 10px; /* Canto superior esquerdo */
+            left: 10px; /* Canto superior esquerdo */
+            background: white; /* Fundo branco */
+            color: black; /* Cor do texto/seta preta */
+            border: 1px solid black; /* Borda mais fina */
+            padding: 5px 8px; /* Padding menor */
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem; /* Fonte menor */
+            font-weight: bold; /* Negrito */
+            z-index: 1000;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px; /* Gap menor */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra mais suave */
+        }
+
+        #backToSiteBtn:hover {
+            background: #f0f0f0; /* Levemente cinza ao passar o mouse */
+            color: #333;
+            transform: none;
+        }
+
+        #backToSiteBtn::before {
+            content: '←';
+            font-size: 1.2rem; /* Seta menor */
+            font-weight: bold;
+        }
+
+        #backToSiteBtn .tooltip {
+            display: none;
+            font-size: 0.8rem; /* Tooltip menor */
+            font-weight: bold;
+        }
+
+        #backToSiteBtn:hover .tooltip {
+            display: inline;
+        }
+
+    #level {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.3rem;
+      background: #240046;
+      padding: 6px 16px;
+      border-radius: 10px;
+      user-select: none;
+      color: white;
+      font-weight: bold;
+      z-index: 10;
+    }
+
+	    #gridWrapper {
+	  margin: 20px auto; /* Centraliza horizontalmente */
+	  padding: 0;
+	  display: flex;
+	  justify-content: center; /* Centraliza o grid dentro do wrapper */
+	}
+
+/* Estilo do player de música */
+#playerUI {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  color: white;
+  text-align: center;
+  gap: 10px;
+}
+
+#musicaAtual {
+  font-size: 1.2rem;
+  font-weight: bold;
+  overflow-wrap: break-word;
+  max-width: 90%;
+}
+
+#tempoAtual {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+#progressBar {
+  width: 80%;
+  appearance: none;
+  height: 6px;
+  border-radius: 5px;
+  background: #888;
+  cursor: pointer;
+}
+
+#progressBar::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -4px;
+}
+
+#progressBar::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#playerUI > div {
+  display: flex;
+  gap: 20px;
+  font-size: 1.8rem;
+}
+
+#voltarWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+
+    #catalogoMusicas {
+      background: #222;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #catalogoMusicas.hidden {
+      display: none;
+    }
+
+    /* Estilos do pop-up de boas-vindas */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .popup-overlay.hidden {
+      display: none;
+    }
+
+	    .popup-content {
+	      background: #240046;
+	      padding: 40px;
+	      border-radius: 15px;
+	      text-align: center;
+	      position: relative;
+	      max-width: 400px;
+	      box-shadow: 0 0 30px rgba(98, 0, 234, 0.5);
+	    }
+	
+	    /* Estilos para a tela de conclusão profissional */
+	    .win-screen-overlay {
+	      position: fixed;
+	      top: 0;
+	      left: 0;
+	      width: 100%;
+	      height: 100%;
+	      background: rgba(0, 0, 0, 0.9);
+	      display: flex;
+	      justify-content: center;
+	      align-items: center;
+	      z-index: 10001;
+	      opacity: 0;
+	      visibility: hidden;
+	      transition: opacity 0.5s, visibility 0.5s;
+	    }
+	
+	    .win-screen-overlay.visible {
+	      opacity: 1;
+	      visibility: visible;
+	    }
+	
+	    .win-screen-content {
+	      background: linear-gradient(135deg, #240046, #6200ea);
+	      padding: 50px;
+	      border-radius: 20px;
+	      text-align: center;
+	      max-width: 600px;
+	      box-shadow: 0 0 50px rgba(98, 0, 234, 0.8);
+	      transform: scale(0.8);
+	      transition: transform 0.5s ease-out;
+	      animation: pulse 1.5s infinite alternate;
+	    }
+	
+	    .win-screen-overlay.visible .win-screen-content {
+	      transform: scale(1);
+	    }
+	
+	    @keyframes pulse {
+	      from {
+	        box-shadow: 0 0 30px rgba(98, 0, 234, 0.5);
+	      }
+	      to {
+	        box-shadow: 0 0 60px rgba(98, 0, 234, 1);
+	      }
+	    }
+	
+	    .win-screen-content h2 {
+	      font-size: 3rem;
+	      color: #ffeb3b; /* Amarelo vibrante */
+	      margin-bottom: 10px;
+	      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	    }
+	
+	    .win-screen-content p {
+	      font-size: 1.5rem;
+	      color: white;
+	      margin-bottom: 30px;
+	    }
+	
+	    .win-screen-content button {
+	      background: #ffeb3b;
+	      color: #240046;
+	      font-weight: bold;
+	      padding: 15px 30px;
+	      font-size: 1.5rem;
+	      border-radius: 10px;
+	      transition: background 0.3s, transform 0.1s;
+	    }
+	
+	    .win-screen-content button:hover {
+	      background: #ffd700;
+	      transform: translateY(-2px);
+	    }
+	
+	    .win-screen-content button:active {
+	      transform: translateY(0);
+	    }
+	
+	    .fireworks {
+	      position: absolute;
+	      top: 0;
+	      left: 0;
+	      width: 100%;
+	      height: 100%;
+	      pointer-events: none;
+	      overflow: hidden;
+	    }
+	
+	    .confetti {
+	      position: absolute;
+	      width: 10px;
+	      height: 10px;
+	      background: #ffeb3b; /* Cor inicial */
+	      opacity: 0;
+	      animation: confetti-fall 2s ease-out forwards;
+	    }
+	
+	    @keyframes confetti-fall {
+	      0% {
+	        opacity: 1;
+	        transform: translateY(0) rotate(0deg);
+	      }
+	      100% {
+	        opacity: 0;
+	        transform: translateY(100vh) rotate(720deg);
+	      }
+	    }
+	
+	    /* Fim dos estilos da tela de conclusão profissional */
+	      background: #240046;
+	      padding: 40px;
+	      border-radius: 15px;
+	      text-align: center;
+	      position: relative;
+	      max-width: 400px;
+	      box-shadow: 0 0 30px rgba(98, 0, 234, 0.5);
+	    }
+	
+
+      background: #240046;
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      position: relative;
+      max-width: 400px;
+      box-shadow: 0 0 30px rgba(98, 0, 234, 0.5);
+    }
+
+    .popup-content h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .popup-content p {
+      font-size: 1.2rem;
+      color: white;
+      margin-bottom: 0;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 2.5rem;
+      cursor: pointer;
+      padding: 0;
+      margin: 0;
+      line-height: 1;
+      transition: transform 0.2s;
+    }
+
+    .close-btn:hover {
+      transform: scale(1.2);
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+  <!-- Botão Voltar para o Site -->
+	  <button id="backToSiteBtn">
+	    <span class="tooltip">Voltar para o site</span>
+	  </button>
+		  <h1 id="welcome" style="margin-top: 80px;">
+		  Bem-vindo ao Caça-Palavras
+  <button id="colorThemeBtn" style="font-size: 0.8rem; margin-left: 10px; padding: 4px 8px;">temas</button>
+  <label id="wallpaperLabel" for="uploadWallpaper" style="font-size: 0.8rem; margin-left: 10px; padding: 4px 8px; background: #6200ea; color: white; border-radius: 6px; cursor: pointer;">Escolher wallpaper</label>
+  <input type="file" id="uploadWallpaper" accept="image/*" style="display: none;" />
+</h1>
+  <h2 id="score">Pontuação: 0</h2>
+  <button id="startBtn">Começar Jogo</button>
+
+  <div id="difficulty" class="hidden">
+    <h2>Escolha a Dificuldade</h2>
+    <button onclick="setDifficulty('facil')">Fácil</button>
+    <button onclick="setDifficulty('medio')">Médio</button>
+    <button onclick="setDifficulty('dificil')">Difícil</button>
+  </div>
+
+  <div id="themes" class="hidden">
+    <h2>Escolha o Tema</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; max-width: 800px; margin: 20px auto; padding: 0 20px;">
+      <button onclick="startGame('Tecnologia')">Tecnologia</button>
+      <button onclick="startGame('Animais')">Animais</button>
+      <button onclick="startGame('Escola')">Escola</button>
+      <button onclick="startGame('Frutas')">Frutas</button>
+      <button onclick="startGame('Espaço')">Espaço</button>
+      <button onclick="startGame('Países')">Países</button>
+      <button onclick="startGame('Cores')">Cores</button>
+      <button onclick="startGame('Esportes')">Esportes</button>
+      <button onclick="startGame('Profissões')">Profissões</button>
+      <button onclick="startGame('Objetos')">Objetos</button>
+      <button onclick="startGame('Natureza')">Natureza</button>
+      <button onclick="startGame('Alimentos')">Alimentos</button>
+      <button onclick="startGame('Bebidas')">Bebidas</button>
+      <button onclick="startGame('Insetos')">Insetos</button>
+    </div>
+  </div>
+
+
+
+
+  <!-- Botão para abrir o catálogo -->
+  <button id="trocarMusicaBtn" class="hidden">trocar Música</button>
+<button id="playerBtn" class="hidden" style="font-size: 0.9rem;">♫</button>
+
+
+
+  <!-- Catálogo escondido -->
+  <div id="catalogoMusicas" class="hidden">
+    <h3>Escolha uma música:</h3>
+    <ul style="list-style:none; padding:0;">
+<li><button onclick="trocarMusica('No 1 party Anthem.mp3')">No 1 party Anthem </button></li>
+<li><button onclick="trocarMusica('Again.mp3')">Again</button></li>
+<li><button onclick="trocarMusica('Back to friends.mp3')">Back to friend</button></li>
+<li><button onclick="trocarMusica('Get you.mp3')">Get you</button></li>
+<li><button onclick="trocarMusica('Lover you should‘ve come over.mp3')">Lover you should've come over </button></li>
+<li><button onclick="trocarMusica('Superpowes.mp3')">Superpowes</button></li>
+<li><button onclick="trocarMusica('Les.mp3')">Les</button></li>
+<li><button onclick="trocarMusica('Nights like this.mp3')">Nights like this</button></li>
+<li><button onclick="trocarMusica('Tem que tirar o chapéu.mp3')">Tem que tirar o chapéu</button></li>
+<li><button onclick="trocarMusica('Montagem xonada.mp3')">Montagem xonada</button></li>
+<li><button onclick="trocarMusica('Dia delícia.mp3')">Dia delícia</button></li>
+<li><button onclick="trocarMusica('Montagem bandido.mp3')">Montagem bandido</button></li>
+   
+    </ul>
+  </div>
+
+
+<div id="ytContainer" class="hidden" style="margin-top: 20px;">
+  <input type="text" id="searchInput" placeholder="Digite o nome da música..." />
+  <button onclick="search()">Buscar</button>
+  <div class="results" id="results"></div>
+
+  <div id="playerUI" class="hidden">
+    <p id="musicaAtual">Nenhuma música tocando</p>
+    <p id="tempoAtual">00:00 / 00:00</p>
+    <input id="progressBar" type="range" value="0" min="0" max="100" />
+    <div>
+      <button id="btnVoltar">⏮︎</button>
+      <button id="togglePlayBtn">▶︎</button>
+      <button id="btnAvancar">⏭︎</button>
+    </div>
+  </div>
+</div>
+
+<audio id="audioPlayer" class="hidden"></audio>
+
+
+
+
+  <div id="gameArea" class="hidden">
+    <div class="word-section">
+      <div id="level">Nível 1</div>
+      <h3>Palavras para encontrar</h3>
+      <div class="word-list" id="wordList"></div>
+    </div>
+	<div id="gridWrapper" style="display: flex; justify-content: center;">
+	  <div id="grid" class="grid"></div>
+	</div>
+    
+   <div id="gameButtons">  
+  <button id="musicBtn">🎵 Música</button>  
+<!-- Botão Voltar ao Início -->  <div class="centralizado">  
+	<button id="backBtn" style="padding: 8px 16px; font-size: 0.9rem; margin-top: 20px;">Voltar ao Início</button>  
+	</div>  
+
+  <audio id="music" src="fundo.mp3"></audio>
+  <audio id="fail" src="fail.mp3"></audio>
+  <audio id="wordFound" src="word.mp3"></audio>
+  <audio id="winGame" src="Win.mp3"></audio>
+  <audio id="bubbleSound" src="bolha.mp3"></audio>
+  <audio id="popSound" src="pop.mp3"></audio>
+
+  <script>
+    const wordsByTheme = {
+      'Tecnologia': [
+        'APP', 'CLOUD', 'JAVA', 'HTML', 'LINUX', 'SENHA', 'ROBOT', 'WIFI', 'DADOS', 'CODIGO',
+        'BYTE', 'SCRIPT', 'LOGIN', 'MOUSE', 'NAVEGADOR', 'PLUGIN', 'PIXEL', 'PROTOCOLO', 'CSS', 'API',
+        'BYTECODE', 'CACHE', 'DOMINIO', 'FRAME', 'GITHUB', 'HOST', 'IP', 'JAVASCRIPT', 'KERNEL', 'LOG',
+        'MODULO', 'NODE', 'OVERRIDE', 'PATCH', 'QUERY', 'REDE', 'SERVER', 'TOKEN', 'URL', 'VPN'
+      ],
+      'Animais': [
+        'GATO', 'CAO', 'TIGRE', 'PANDA', 'CAVALO', 'RATO', 'CISNE', 'URSO', 'ZEBRA', 'FOCA',
+        'AGUIA', 'BODE', 'CAMELO', 'DROMEDARIO', 'ELEFANTE', 'FALCAO', 'GIRAFA', 'HIPOPOTAMO', 'IBIS', 'JACARE',
+        'KIWI', 'LEAO', 'MACACO', 'NARVAL', 'ORNITORRINCO', 'PATO', 'QUATI', 'RAPOSA', 'SERPENTE', 'TATU',
+        'URUBU', 'VEADO', 'WAPITI', 'XEREM', 'ZANGAO', 'ZEBU', 'ARARA', 'BALEIA', 'CORUJA', 'DAGUA'
+      ],
+      'Escola': [
+        'LIVRO', 'LAPIS', 'PROVA', 'RECREIO', 'LICAO', 'MESA', 'QUADRO', 'TEXTO', 'AULA', 'NOTA',
+        'APONTAMENTO', 'BIBLIOTECA', 'CADERNO', 'DICIONARIO', 'ENSINO', 'FORMULA', 'GRUPO', 'HISTORIA', 'INDICE', 'JANELA',
+        'LIVRODIDATICO', 'MATEMATICA', 'NUMERO', 'ORDEM', 'PLANO', 'QUESTAO', 'REDACAO', 'SALA', 'TAREFA', 'UNIFORME',
+        'VESTIBULAR', 'XEROX', 'ZONA', 'ALUNO', 'BLOCO', 'CLASSE', 'DIA', 'EXERCICIO', 'FREQUENCIA', 'GEOGRAFIA'
+      ],
+      'Frutas': [
+        'UVA', 'PERA', 'BANANA', 'MACA', 'KIWI', 'LIMAO', 'COCO', 'FIGO', 'AMEIXA', 'JABUTI',
+        'ABACATE', 'ABACAXI', 'ACEROLA', 'CAJU', 'CARAMBOLA', 'DAMASCO', 'FRAMBOESA', 'GOIABA', 'JACA', 'MANGA',
+        'MARACUJA', 'MELANCIA', 'MELAO', 'MIRTILO', 'NECTARINA', 'PEIXE', 'PITANGA', 'ROMA', 'TANGERINA', 'TOMATE',
+        'CAQUI', 'GRAVIOLA', 'LARANJA', 'MIRABELA', 'PAPAYA', 'PITAYA', 'ROMA', 'SIRIGUELA', 'TAMARINDO', 'TORANJA'
+      ],
+      'Espaço': [
+        'SOL', 'LUZ', 'TERRA', 'SATURNO', 'ASTRO', 'VIA', 'NEBULOSA', 'ROVER', 'NASA', 'FOTON',
+        'ASTEROIDE', 'COMETA', 'CONSTELACAO', 'COSMOS', 'CRATERA', 'ECLIPSE', 'GALAXIA', 'GRAVIDADE', 'LUA', 'METEORO',
+        'ORBITA', 'PLANETA', 'QUASAR', 'RADIACAO', 'SATELITE', 'SOLAR', 'SUPERNOVA', 'TELURIA', 'TELURUS', 'TELURICO',
+        'TELESCOPIO', 'URANO', 'VENUS', 'ZODIACO', 'BURACONEGRO', 'ESTRELA', 'FUSAO', 'VENUS', 'MERCURIO'
+      ],
+      'Países': [
+        'BRASIL', 'ARGENTINA', 'CHILE', 'COLOMBIA', 'PERU', 'URUGUAI', 'PARAGUAI', 'BOLIVIA', 'VENEZUELA', 'GUIANA',
+        'FRANCA', 'ALEMANHA', 'ITALIA', 'ESPANHA', 'PORTUGAL', 'INGLATERRA', 'IRLANDA', 'BELGICA', 'HOLANDA', 'SUECIA',
+        'NORUEGA', 'DINAMARCA', 'FINLANDIA', 'POLONIA', 'HUNGRIA', 'ROMENIA', 'GRECIA', 'TURQUIA', 'EGITO', 'MARROCOS',
+        'AFRICA', 'JAPAO', 'CHINA', 'INDIA', 'TAILANDIA', 'VIETNA', 'COREIA', 'AUSTRALIA', 'CANADA', 'MEXICO'
+      ],
+      'Cores': [
+        'VERMELHO', 'AZUL', 'VERDE', 'AMARELO', 'LARANJA', 'ROXO', 'ROSA', 'MARROM', 'CINZA', 'PRETO',
+        'BRANCO', 'TURQUESA', 'VIOLETA', 'INDIGO', 'MAGENTA', 'CIANO', 'OURO', 'PRATA', 'BRONZE', 'CORAL',
+        'ESCARLATE', 'CARMIM', 'CRIMSON', 'ESCURO', 'CLARO', 'PASTEL', 'NEON', 'METALICO', 'FOSCO', 'BRILHANTE',
+        'VIBRANTE', 'NEUTRO', 'QUENTE', 'FRIO', 'SATURADO', 'DESBOTADO', 'PURO', 'MISTO', 'DEGRADADO', 'ARCOIRIS'
+      ],
+      'Esportes': [
+        'FUTEBOL', 'BASQUETE', 'VOLEI', 'TENIS', 'BADMINTON', 'NATACAO', 'ATLETISMO', 'GINASTICA', 'JUDÔ', 'KARATE',
+        'BOXE', 'LUTA', 'CICLISMO', 'ESQUI', 'PATINACAO', 'SURFE', 'SKATE', 'ESCALADA', 'HIPISMO', 'REMO',
+        'POLO', 'GOLFE', 'CRICKET', 'RUGBY', 'HOQUEI', 'BEISEBOL', 'SOFTBALL', 'ARCO', 'ESGRIMA', 'PENTATLO',
+        'TRIATLO', 'MARATONA', 'SALTO', 'LANCAMENTO', 'DANCA', 'PARKOUR', 'SLACKLINE', 'RAPEL', 'MERGULHO', 'VELA'
+      ],
+      'Profissões': [
+        'MEDICO', 'ENFERMEIRO', 'DENTISTA', 'FARMACEUTICO', 'PSICÓLOGO', 'ADVOGADO', 'JUIZ', 'DELEGADO', 'POLICIAL', 'BOMBEIRO',
+        'PROFESSOR', 'PROFESSOR', 'PEDAGOGO', 'EDUCADOR', 'INSTRUTOR', 'ENGENHEIRO', 'ARQUITETO', 'PROGRAMADOR', 'DESIGNER', 'ARTISTA',
+        'MUSICO', 'ATOR', 'DIRETOR', 'PRODUTOR', 'JORNALISTA', 'ESCRITOR', 'POETA', 'PINTOR', 'ESCULTOR', 'FOTOGRAFO',
+        'CHEF', 'COZINHEIRO', 'GARCOM', 'BARMAN', 'PASTELEIRO', 'PADEIRO', 'MECANICO', 'ELETRICISTA', 'ENCANADOR', 'CARPINTEIRO'
+      ],
+      'Objetos': [
+        'MESA', 'CADEIRA', 'CAMA', 'ARMARIO', 'SOFA', 'POLTRONA', 'ESTANTE', 'ESPELHO', 'QUADRO', 'LAMPADA',
+        'VELA', 'RELÓGIO', 'TELEFONE', 'COMPUTADOR', 'TECLADO', 'MOUSE', 'MONITOR', 'IMPRESSORA', 'SCANNER', 'WEBCAM',
+        'CAMERA', 'TELEVISAO', 'RADIO', 'FONE', 'MICROFONE', 'ALTO_FALANTE', 'CONTROLE', 'CONSOLE', 'JOYSTICK', 'TABLET',
+        'NOTEBOOK', 'SMARTPHONE', 'CARREGADOR', 'CABO', 'ADAPTADOR', 'HUB', 'ROTEADOR', 'MODEM', 'SERVIDOR', 'IMPRESSORA'
+      ],
+      'Natureza': [
+        'ARVORE', 'FLOR', 'FOLHA', 'GALHO', 'RAIZ', 'TRONCO', 'FLORESTA', 'MONTANHA', 'VALE', 'RIO',
+        'LAGO', 'OCEANO', 'PRAIA', 'AREIA', 'PEDRA', 'ROCHA', 'CACHOEIRA', 'FONTE', 'NASCENTE', 'DELTA',
+        'ESTUARIO', 'LAGOA', 'PÂNTANO', 'CHARCO', 'POÇO', 'POCO', 'CAVERNA', 'GRUTA', 'VULCAO', 'GEYSER',
+        'CRATERA', 'DESERTO', 'SAVANA', 'ESTEPE', 'TUNDRA', 'TAIGA', 'MATA', 'SELVA', 'MANGUE', 'CERRADO'
+      ],
+      'Alimentos': [
+        'ARROZ', 'FEIJAO', 'MACARRAO', 'PÃO', 'BOLO', 'BISCOITO', 'PIZZA', 'HAMBURGUER', 'SANDUICHE', 'SALADA',
+        'SOPA', 'CALDO', 'MOLHO', 'TEMPERO', 'SAL', 'ACUCAR', 'OLEO', 'MANTEIGA', 'QUEIJO', 'LEITE',
+        'IOGURTE', 'SORVETE', 'PUDIM', 'GELATINA', 'DOCE', 'CHOCOLATE', 'CARAMELO', 'CHICLETE', 'BALA', 'PIRULITO',
+        'CHICOTE', 'PAÇOCA', 'AMENDOIM', 'CASTANHA', 'NÓZES', 'AMÊNDOA', 'AVELÃ', 'PISTACHE', 'GERGELIM', 'LINHAÇA'
+      ],
+      'Bebidas': [
+        'AGUA', 'SUCO', 'REFRIGERANTE', 'CERVEJA', 'VINHO', 'CHAMPAGNE', 'WHISKY', 'VODKA', 'RUM', 'TEQUILA',
+        'CONHAQUE', 'LICOR', 'CAFE', 'CHÁ', 'LEITE', 'CHOCOLATE', 'MILKSHAKE', 'SMOOTHIE', 'LIMONADA', 'SUCO',
+        'AGUA_MINERAL', 'AGUA_COM_GAS', 'AGUA_TONICA', 'ENERGETICO', 'ISOTONICO', 'XAROPE', 'CALDA', 'NÉCTAR', 'COMPOTA', 'VINHO_TINTO',
+        'VINHO_BRANCO', 'VINHO_ROSE', 'ESPUMANTE', 'SIDRA', 'CHOPP', 'AGUA_GELADA', 'AGUA_QUENTE', 'AGUA_MORNA', 'AGUA_FRIA', 'AGUA_DESTILADA'
+      ],
+      'Insetos': [
+        'FORMIGA', 'ABELHA', 'VESPA', 'BORBOLETA', 'MARIPOSA', 'LIBÉLULA', 'GAFANHOTO', 'GRILO', 'CIGARRA', 'BARATA',
+        'PULGA', 'PIOLHO', 'CARRAPATO', 'MOSQUITO', 'MOSCA', 'MUTUCA', 'TABANIDA', 'BORRACHUDO', 'PERNILONGO', 'PERCEVEJO',
+        'JOANINHA', 'BESOURO', 'ESCARAVELHO', 'LOUVA_DEUS', 'MANTIS', 'ESCORPIAO', 'ARANHA', 'OPILIAO', 'MILIPÉ', 'CENTOPEIA',
+        'MINHOCA', 'LESMA', 'CARACOL', 'MOLUSCO', 'LAGARTA', 'CASULO', 'PUPA', 'NINFA', 'LARVA', 'OVOS'
+      ]
+    };
+// Aplica o wallpaper salvo se existir
+const savedWallpaper = localStorage.getItem('wallpaperTutyxs');
+if (savedWallpaper) {
+  document.body.style.backgroundImage = `url('${savedWallpaper}')`;
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundPosition = 'center';
+  document.body.style.backgroundRepeat = 'no-repeat';
+}
+    const startBtn = document.getElementById('startBtn');
+    const welcome = document.getElementById('welcome');
+    const difficultyDiv = document.getElementById('difficulty');
+    const themesDiv = document.getElementById('themes');
+    const gameArea = document.getElementById('gameArea');
+    const wordListDiv = document.getElementById('wordList');
+    const gridDiv = document.getElementById('grid');
+    const music = document.getElementById('music');
+    const playlist = ['fundo.mp3', 'fundo2.mp3', 'fundo3.mp3', 'fundo4.mp3'];
+    let currentTrackIndex = 0;
+
+    const wordFound = document.getElementById('wordFound');
+    const winGame = document.getElementById('winGame');
+    const fail = document.getElementById('fail');
+    const musicBtn = document.getElementById('musicBtn');
+    const scoreEl = document.getElementById('score');
+
+    const levelEl = document.getElementById('level');
+    const trocarMusicaBtn = document.getElementById('trocarMusicaBtn');
+    const catalogoMusicas = document.getElementById('catalogoMusicas');
+    const bubbleSound = document.getElementById('bubbleSound');
+    const popSound = document.getElementById('popSound');
+
+
+    let grid = [];
+    let selectedWords = [];
+    let foundWords = [];
+    let gridSize = 10;
+    let wordCount = 10;
+    let score = 0;
+    let currentTheme = null;
+    let currentLevel = null;
+    let currentGameLevel = 1;
+
+    let isSelecting = false;
+    let selectedCells = [];
+    let startCell = null;
+    let lastCellCoords = null;
+
+    // Inicia jogo - abre seleção de dificuldade
+    startBtn.onclick = () => {
+      if (popSound) popSound.play();
+      startBtn.classList.add('hidden');
+      welcome.classList.add('hidden');
+colorThemeBtn.classList.add('hidden');
+      difficultyDiv.classList.remove('hidden');
+      loadScore();
+    };
+
+	    function setDifficulty(level) {
+	  if (popSound) popSound.play(); // Som toca ao clicar nos botões de dificuldade
+	  difficultyDiv.classList.add('hidden');
+	  themesDiv.classList.remove('hidden');
+	  currentLevel = level;
+	  // Limpa a grade
+	  gridDiv.innerHTML = '';
+	}
+
+
+
+
+     
+window.addEventListener('DOMContentLoaded', () => {
+  // Controle do pop-up de boas-vindas
+  const welcomePopup = document.getElementById('welcomePopup');
+  const closePopup = document.getElementById('closePopup');
+  const music = document.getElementById('music');
+
+	  // Fechar pop-up e iniciar música
+	  closePopup.onclick = () => {
+	    welcomePopup.classList.add('hidden');
+	    if (music) {
+	      music.play().catch(err => console.log('Erro ao reproduzir música:', err));
+	    }
+	  };
+	
+	  // Lógica da playlist
+	  music.addEventListener('ended', () => {
+	    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+	    music.src = playlist[currentTrackIndex];
+	    music.play().catch(err => console.log('Erro ao reproduzir próxima música:', err));
+	  });
+  
+  const ytContainer = document.getElementById('ytContainer');
+  const resultsDiv = document.getElementById('results');
+  const searchInput = document.getElementById('searchInput');
+  const audioPlayer = document.getElementById('audioPlayer');
+  const playerUI = document.getElementById('playerUI');
+  const musicaAtual = document.getElementById('musicaAtual');
+  const tempoAtual = document.getElementById('tempoAtual');
+  const progressBar = document.getElementById('progressBar');
+  const togglePlayBtn = document.getElementById('togglePlayBtn');
+  const btnVoltar = document.getElementById('btnVoltar');
+  const btnAvancar = document.getElementById('btnAvancar');
+
+
+
+  async function search() {
+    const query = searchInput.value.trim();
+    resultsDiv.innerHTML = '';
+    if (!query || query.length < 3) return alert('Digite algo com pelo menos 3 letras.');
+
+    try {
+      // Usando a API gabeofapi.speedhosting.cloud para busca
+      const res = await fetch(`https://gabeofapi.speedhosting.cloud/api/download/playAudio?query=${encodeURIComponent(query)}&apikey=Gebe`);
+      const data = await res.json();
+      const resultados = data.resultado || [];
+
+      if (!resultados || resultados.length === 0) {
+        resultsDiv.innerHTML = '<p>Nenhum resultado encontrado.</p>';
+        return;
+      }
+
+      // Exibir resultados para o usuário escolher (ou tocar o primeiro)
+      resultsDiv.innerHTML = '';
+      resultados.forEach((item, index) => {
+        const resultEl = document.createElement('div');
+        resultEl.className = 'music-result';
+        resultEl.innerHTML = `
+          <p>${item.Nome}</p>
+          <button onclick="playAudio('${item.LinkYoutube}', '${item.Nome.replace(/'/g, "\\'")}')">Tocar</button>
+        `;
+        resultsDiv.appendChild(resultEl);
+      });
+    } catch (e) {
+      console.error(e);
+      resultsDiv.innerHTML = '<p>Erro ao buscar músicas.</p>';
+    }
+  }
+
+  async function playAudio(youtubeUrl, title) {
+    try {
+      // Usando a API gabeofapi.speedhosting.cloud para obter o link de áudio direto
+      const res = await fetch(`https://gabeofapi.speedhosting.cloud/api/download/playAudio?url=${encodeURIComponent(youtubeUrl)}&apikey=Gebe`);
+      const data = await res.json();
+      const audioUrl = data?.resultado?.LinkAudio;
+
+      if (!audioUrl) throw new Error('Erro ao obter o áudio. Link não encontrado.');
+
+      audioPlayer.src = audioUrl;
+      musicaAtual.textContent = title || 'Música sem título';
+      togglePlayBtn.textContent = '■';
+      playerUI.classList.remove('hidden');
+
+      await audioPlayer.play();
+    } catch (e) {
+      throw new Error('Reprodução bloqueada pelo navegador ou erro na API.');
+    }
+  }
+
+  function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60).toString().padStart(2, '0');
+    return `${min}:${sec}`;
+  }
+
+  audioPlayer.ontimeupdate = () => {
+    const current = audioPlayer.currentTime;
+    const total = audioPlayer.duration || 0;
+    tempoAtual.textContent = `${formatTime(current)} / ${formatTime(total)}`;
+    progressBar.value = total ? (current / total) * 100 : 0;
+  };
+
+  progressBar.oninput = () => {
+    const total = audioPlayer.duration;
+    audioPlayer.currentTime = (progressBar.value / 100) * total;
+  };
+
+  function togglePlayPause() {
+    if (audioPlayer.paused) {
+      audioPlayer.play();
+      togglePlayBtn.textContent = '■';
+    } else {
+      audioPlayer.pause();
+      togglePlayBtn.textContent = '▶︎';
+    }
+  }
+
+  function voltar10s() {
+    console.log('Voltar 10s clicado');
+    if (!isNaN(audioPlayer.duration)) {
+      audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
+    }
+  }
+
+  function avancar10s() {
+    console.log('Avançar 10s clicado');
+    if (!isNaN(audioPlayer.duration)) {
+      audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 10);
+    }
+  }
+
+  // Associa eventos aos botões agora que o DOM está carregado
+  document.getElementById('btnVoltar').onclick = voltar10s;
+  document.getElementById('btnAvancar').onclick = avancar10s;
+  document.getElementById('togglePlayBtn').onclick = togglePlayPause;
+
+  // Disponibiliza a função search globalmente para o botão Buscar funcionar com onclick direto
+  window.search = search;
+});
+
+
+
+
+function voltarMenu() {
+  document.getElementById("menuInicial").classList.remove("hidden");
+  document.getElementById("jogo").classList.add("hidden");
+  document.getElementById("configuracoes").classList.add("hidden");
+  document.getElementById("ytContainer").classList.add("hidden");
+
+  document.getElementById("playerUI").classList.add("hidden");
+  document.getElementById("audioPlayer").pause();
+}
+
+    function updateLevel() {
+      levelEl.textContent = `Nível ${currentGameLevel}`;
+    }
+
+    function loadScore() {
+      const saved = localStorage.getItem('caçaPalavrasScore');
+      if (saved !== null) {
+        score = parseInt(saved, 10);
+      } else {
+        score = 0;
+      }
+      updateScore();
+    }
+
+    function saveScore() {
+      localStorage.setItem('caçaPalavrasScore', score);
+    }
+
+
+
+    function startGame(theme) {
+      if (popSound) popSound.play();
+      currentTheme = theme;
+      scoreEl.style.display = 'block';
+      themesDiv.classList.add('hidden');
+      gameArea.classList.remove('hidden');
+      trocarMusicaBtn.classList.add('hidden');
+      playerBtn.classList.add('hidden');
+
+     
+
+if (currentLevel === 'facil') {
+  gridSize = 6;
+  wordCount = 4;
+} else if (currentLevel === 'medio') {
+  gridSize = 8;
+  wordCount = 7;
+} else {
+  gridSize = 10;
+  wordCount = 10;
+}
+
+// Limpa estilos de transformação para todos os níveis
+gridDiv.style.transform = '';
+gridDiv.style.marginBottom = '';
+gridDiv.style.transformOrigin = '';
+document.getElementById('gridWrapper').style.height = 'auto';
+document.getElementById('gameButtons').style.marginTop = '30px';
+
+updateLevel();
+
+      // seleciona palavras que cabem no grid, filtrando as maiores que o grid
+      const possibleWords = wordsByTheme[theme].filter(w => w.length <= gridSize);
+      selectedWords = shuffleArray(possibleWords).slice(0, wordCount);
+      foundWords = [];
+      createGrid();
+      music.play();
+      musicBtn.textContent = "Pausar Música";
+    }
+
+    function shuffleArray(arr) {
+      let array = arr.slice();
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function randomLetter() {
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      return letters.charAt(Math.floor(Math.random() * letters.length));
+    }
+
+    function createGrid() {
+      grid = [];
+      gridDiv.innerHTML = '';
+      
+      // Define o tamanho da célula e aplica ao gridDiv
+      const cellSize = 38; // Tamanho padrão da célula
+      gridDiv.style.gridTemplateColumns = `repeat(${gridSize}, ${cellSize}px)`;
+      gridDiv.style.gridTemplateRows = `repeat(${gridSize}, ${cellSize}px)`;
+      gridDiv.style.transform = '';
+      gridDiv.style.marginBottom = '';
+
+      for (let i = 0; i < gridSize; i++) {
+        grid[i] = [];
+        for (let j = 0; j < gridSize; j++) {
+          grid[i][j] = '';
+        }
+      }
+
+
+      // Tenta colocar cada palavra na grade e guarda só as que foram realmente colocadas
+let confirmedWords = [];
+
+selectedWords.forEach(word => {
+  if (placeWordInGrid(word)) {
+    confirmedWords.push(word);
+  }
+});
+
+selectedWords = confirmedWords;
+
+      // Preenche as posições vazias com letras aleatórias
+      for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+          if (grid[i][j] === '') {
+            grid[i][j] = randomLetter();
+          }
+        }
+      }
+
+      // Cria as células no DOM
+      for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+          cell.textContent = grid[i][j];
+          cell.dataset.row = i;
+          cell.dataset.col = j;
+
+          // Eventos toque e mouse para seleção
+          cell.addEventListener('mousedown', startSelection);
+          cell.addEventListener('touchstart', startSelection, {passive: false});
+          cell.addEventListener('mouseenter', moveSelection);
+          cell.addEventListener('touchmove', moveSelection, {passive: false});
+          cell.addEventListener('mouseup', endSelection);
+          cell.addEventListener('touchend', endSelection);
+
+          gridDiv.appendChild(cell);
+        }
+      }
+
+      // Mostra a lista das palavras
+      updateWordList();
+    }
+
+    // Tenta colocar palavra no grid numa posição aleatória com uma direção aleatória
+    function placeWordInGrid(word) {
+  const directions = [
+    {x: 1, y: 0},   // direita
+    {x: -1, y: 0},  // esquerda
+    {x: 0, y: 1},   // baixo
+    {x: 0, y: -1},  // cima
+    {x: 1, y: 1},   // diagonal direita baixo
+    {x: 1, y: -1},  // diagonal direita cima
+    {x: -1, y: 1},  // diagonal esquerda baixo
+    {x: -1, y: -1}  // diagonal esquerda cima
+  ];
+
+  let placed = false;
+  let attempts = 0;
+  while (!placed && attempts < 1000) {
+    attempts++;
+    const dir = directions[Math.floor(Math.random() * directions.length)];
+    const startX = Math.floor(Math.random() * gridSize);
+    const startY = Math.floor(Math.random() * gridSize);
+
+    let fits = true;
+    let x = startX;
+    let y = startY;
+
+    for (let i = 0; i < word.length; i++) {
+      if (
+        x < 0 || x >= gridSize || y < 0 || y >= gridSize ||
+        (grid[y][x] !== '' && grid[y][x] !== word[i])
+      ) {
+        fits = false;
+        break;
+      }
+      x += dir.x;
+      y += dir.y;
+    }
+
+    if (fits) {
+      x = startX;
+      y = startY;
+      for (let i = 0; i < word.length; i++) {
+        grid[y][x] = word[i];
+        x += dir.x;
+        y += dir.y;
+      }
+      placed = true;
+    }
+  }
+
+  return placed;
+}
+
+document.getElementById('backBtn').addEventListener('click', voltarMenu);
+
+// Botão voltar para o site
+const backToSiteBtn = document.getElementById('backToSiteBtn');
+if (backToSiteBtn) {
+  backToSiteBtn.addEventListener('click', () => {
+    window.close();
+    // Se window.close() não funcionar (algumas restrições de navegador), redireciona
+    setTimeout(() => {
+      window.location.href = '/index.html';
+    }, 100);
+  });
+}
+
+function voltarMenu() {
+  gameArea.classList.add('hidden');
+  welcome.classList.remove('hidden');
+  startBtn.classList.remove('hidden');
+  colorThemeBtn.classList.remove('hidden');
+  trocarMusicaBtn.classList.add('hidden');
+  catalogoMusicas.classList.add('hidden');
+  playerBtn.classList.add('hidden');
+
+  document.getElementById("ytContainer").classList.add("hidden");
+  document.getElementById("searchInput").value = '';
+  document.getElementById("results").innerHTML = '';
+  document.getElementById("playerUI").classList.add("hidden");
+  document.getElementById("audioPlayer").pause();
+  scoreEl.style.display = 'none';
+  currentGameLevel = 1;
+  updateLevel();
+}
+
+    function updateWordList() {
+      wordListDiv.innerHTML = '';
+      selectedWords.forEach(word => {
+        const span = document.createElement('span');
+        span.textContent = word;
+        if (foundWords.includes(word)) {
+          span.classList.add('found');
+        }
+        wordListDiv.appendChild(span);
+      });
+    }
+
+    // Seletor de células para o toque / clique
+
+    function startSelection(e) {
+      e.preventDefault();
+      if (popSound) popSound.play();
+      clearSelection();
+      isSelecting = true;
+      const cell = e.target;
+      startCell = cell;
+      lastCellCoords = {row: +cell.dataset.row, col: +cell.dataset.col};
+      selectedCells.push(cell);
+      cell.classList.add('selected');
+    }
+
+    function moveSelection(e) {
+      if (!isSelecting) return;
+
+      e.preventDefault();
+
+      let clientX, clientY;
+      if (e.type === 'touchmove') {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+
+      const elem = document.elementFromPoint(clientX, clientY);
+      if (!elem || !elem.classList.contains('cell')) return;
+
+      const row = +elem.dataset.row;
+      const col = +elem.dataset.col;
+
+      // Se a célula já foi selecionada, ignora
+      if (selectedCells.includes(elem)) return;
+
+      // Calcula o vetor da seleção inicial até a célula atual
+      const startRow = +startCell.dataset.row;
+      const startCol = +startCell.dataset.col;
+
+      const dRow = row - startRow;
+      const dCol = col - startCol;
+
+      // Se o movimento não está numa linha reta nas 8 direções válidas, ignora
+      // Valida direção: horizontal, vertical e diagonais só
+      if (Math.abs(dRow) !== Math.abs(dCol) && dRow !== 0 && dCol !== 0) return;
+
+
+      // Determina o passo unitário para iterar entre start e célula atual
+      const stepRow = dRow === 0 ? 0 : dRow / Math.abs(dRow);
+      const stepCol = dCol === 0 ? 0 : dCol / Math.abs(dCol);
+
+      // Limpa seleção anterior e seleciona tudo da startCell até elem
+      // A função clearSelection() remove a classe 'selected' de todas as células
+      clearSelection();
+      selectedCells = [];
+      let r = startRow;
+      let c = startCol;
+
+      // O número de passos é o máximo entre a diferença de linhas e colunas
+      const steps = Math.max(Math.abs(dRow), Math.abs(dCol));
+
+      for (let i = 0; i <= steps; i++) {
+        const cellAt = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+        if (!cellAt) break;
+        // Adiciona a classe 'selected' mesmo que a célula já tenha 'correct'
+        cellAt.classList.add('selected');
+        selectedCells.push(cellAt);
+        
+        // Move para a próxima célula na direção
+        r += stepRow;
+        c += stepCol;
+      }
+    }
+
+    function endSelection(e) {
+      if (!isSelecting) return;
+      isSelecting = false;
+
+      // Pega a palavra selecionada na ordem das células selecionadas
+      const selectedWord = selectedCells.map(c => c.textContent).join('');
+      const selectedWordReversed = selectedCells.map(c => c.textContent).reverse().join('');
+
+      // Verifica se a palavra selecionada está na lista de palavras
+      if (selectedWords.includes(selectedWord)) {
+        markWordFound(selectedWord, selectedCells);
+      } else if (selectedWords.includes(selectedWordReversed)) {
+        markWordFound(selectedWordReversed, selectedCells);
+      } else {
+        fail.play();
+        clearSelection();
+        return;
+      }
+
+      clearSelection();
+
+      // Verifica se o jogador achou todas as palavras
+	      if (foundWords.length === selectedWords.length) {
+	        if (winGame) winGame.play(); // Toca o som de vitória
+	        const pointsGained = 10 * currentGameLevel;
+	        score += pointsGained;
+	        saveScore();
+	        updateScore();
+	        showWinScreen(currentGameLevel, pointsGained);
+	        currentGameLevel++; // Incrementa o nível DEPOIS de mostrar a tela de vitória
+	      }
+    }
+
+    const highlightColors = [
+  '#FF5733', // Vermelho Laranja
+  '#33FF57', // Verde Limão
+  '#3357FF', // Azul Brilhante
+  '#FF33A1', // Rosa Choque
+  '#33FFF6', // Ciano
+  '#FFC300', // Amarelo Ouro
+  '#A133FF', // Roxo
+  '#FF8333', // Laranja
+  '#83FF33', // Verde Claro
+  '#3383FF', // Azul Céu
+  '#C70039', // Vermelho Escuro
+  '#900C3F', // Vinho
+  '#581845', // Roxo Escuro
+  '#DAF7A6', // Verde Claro Pastel
+  '#FFC300', // Amarelo Ouro
+  '#FF5733', // Laranja
+  '#C70039', // Vermelho
+  '#900C3F', // Roxo
+  '#581845', // Roxo Escuro
+  '#DAF7A6'  // Verde Pastel
+];
+
+function markWordFound(word, cells) {
+      if (foundWords.includes(word)) return;
+      foundWords.push(word);
+      if (wordFound) wordFound.play(); // Toca o som de palavra encontrada
+
+      // Seleciona uma cor única para a palavra inteira
+      const colorIndex = (foundWords.length - 1) % highlightColors.length;
+      const color = highlightColors[colorIndex];
+
+      // Marca as células da palavra com a cor única
+      cells.forEach(c => {
+        c.style.backgroundColor = color;
+        c.classList.remove('selected');
+        c.classList.remove('correct'); // Remove a classe 'correct' para garantir que o estilo inline prevaleça
+      });
+
+      updateWordList();
+    }
+
+    function clearSelection() {
+      selectedCells.forEach(c => {
+        c.classList.remove('selected');
+        // Se a célula tem a classe 'correct', ela volta para a cor de correto
+        // Se não tem, fica normal
+      });
+      selectedCells = [];
+    }
+
+    function updateScore() {
+      scoreEl.textContent = `Pontuação: ${score}`;
+    }
+function showWinScreen(levelCompleted, pointsGained) {
+  const winScreen = document.getElementById('winScreen');
+  const winMessage = document.getElementById('winMessage');
+  const nextLevelBtn = document.getElementById('nextLevelBtn');
+  const backToMenuBtn = document.getElementById('backToMenuBtn');
+
+  winMessage.textContent = `Você completou o Nível ${levelCompleted} e ganhou ${pointsGained} pontos!`;
+
+  // Remove ouvintes antigos para evitar duplicação
+  nextLevelBtn.onclick = null;
+  backToMenuBtn.onclick = null;
+
+  // Adiciona novos ouvintes
+  nextLevelBtn.onclick = () => {
+    winScreen.classList.remove('visible');
+    resetGameForNextLevel();
+  };
+
+  backToMenuBtn.onclick = () => {
+    winScreen.classList.remove('visible');
+    voltarMenu();
+  };
+
+  // Exibe a tela
+  winScreen.classList.add('visible');
+  createFireworks();
+}
+
+function createFireworks() {
+  const container = document.getElementById('fireworksContainer');
+  container.innerHTML = ''; // Limpa confetes anteriores
+
+  const colors = ['#ffeb3b', '#6200ea', '#1dd3f8', '#ffffff', '#ff006e']; // Cores dos confetes
+
+  for (let i = 0; i < 50; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = `${Math.random() * 100}%`;
+    confetti.style.top = `${Math.random() * 10}%`; // Começa no topo
+    confetti.style.width = `${Math.random() * 10 + 5}px`;
+    confetti.style.height = `${Math.random() * 10 + 5}px`;
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+    confetti.style.animationDuration = `${Math.random() * 1.5 + 1.5}s`; // Duração aleatória
+    container.appendChild(confetti);
+
+    // Remove o elemento após a animação
+    setTimeout(() => {
+      confetti.remove();
+    }, 3000); // Tempo suficiente para a animação de queda
+  }
+}
+
+function resetGameForNextLevel() {
+  // Mantém o tamanho da grade CONSTANTE conforme a dificuldade escolhida
+  // Não aumenta o tamanho da grade entre níveis
+  
+  if (currentLevel === 'facil') {
+    gridSize = 6;
+    wordCount = 4;
+  } else if (currentLevel === 'medio') {
+    gridSize = 8;
+    wordCount = 7;
+  } else { // 'dificil'
+    gridSize = 10;
+    wordCount = 10;
+  }
+
+  // Remove qualquer transformação de escala
+  const cellSize = 38; // Tamanho padrão da célula
+  gridDiv.style.transform = '';
+  gridDiv.style.transformOrigin = '';
+
+  // Reseta o wrapper para o tamanho padrão
+  const wrapper = document.getElementById('gridWrapper');
+  wrapper.style.width = 'auto';
+  wrapper.style.height = 'auto';
+
+  updateLevel(); // Atualiza o texto do nível
+  foundWords = [];
+  
+  // Filtra palavras que cabem no novo gridSize
+  const possibleWords = wordsByTheme[currentTheme].filter(w => w.length <= gridSize);
+  // Garante que não tentamos selecionar mais palavras do que o disponível
+  const wordsToSelect = Math.min(wordCount, possibleWords.length);
+  selectedWords = shuffleArray(possibleWords).slice(0, wordsToSelect);
+
+  // Se não houver palavras suficientes, informa o usuário e volta ao menu
+  if (selectedWords.length === 0) {
+    alert("Parabéns! Você completou todos os níveis com as palavras disponíveis neste tema!");
+    voltarMenu();
+    return;
+  }
+
+  createGrid();
+}
+
+    // Botão para pausar e tocar música
+	    musicBtn.onclick = () => {
+	      if (music.paused) {
+	        music.play().catch(err => console.log('Erro ao reproduzir música:', err));
+	        musicBtn.textContent = "Pausar Música";
+	      } else {
+	        music.pause();
+	        musicBtn.textContent = "Tocar Música";
+	      }
+	    };
+
+    // Botão para mostrar/esconder catálogo de músicas
+    trocarMusicaBtn.onclick = () => {
+      if (catalogoMusicas.classList.contains('hidden')) {
+        catalogoMusicas.classList.remove('hidden');
+      } else {
+        catalogoMusicas.classList.add('hidden');
+      }
+    };
+
+	    function trocarMusica(musica) {
+	      music.pause();
+	      music.src = musica;
+	      music.play().catch(err => console.log('Erro ao reproduzir música:', err));
+	      catalogoMusicas.classList.add('hidden');
+	      musicBtn.textContent = "Pausar Música";
+	      if (popSound) popSound.play();
+	
+	const nameWithoutExtension = musica.replace(/\.(mp3|wav|ogg)$/i, '');
+		document.getElementById('musicName').textContent = nameWithoutExtension;
+	    }
+
+const colorThemeBtn = document.getElementById('colorThemeBtn');
+let currentThemeIndex = 0;
+
+const colorThemes = [
+  {
+    // 1. Azul-roxo
+    background: '#0f0c29',
+    grid: '#302b63',
+    cell: '#42378f',
+    selected: '#5c27fe',
+    correct: '#1dd3f8',
+    text: '#ffffff',
+    levelText: '#ffffff',
+    scoreText: '#ffffff',
+    wordText: '#ffffff'
+  },
+  {
+    // 2. Preto com branco (ajustado)
+    background: '#000000',
+    grid: '#1a1a1a',
+    cell: '#2b2b2b',
+    selected: '#222222',       // cinza quase preto
+    correct: '#00ffcc',
+    text: '#ffffff',
+    levelText: '#000000',
+    scoreText: '#000000',
+    wordText: '#ffffff'        // texto branco nas palavras a encontrar
+  },
+  {
+    // 3. Branco com preto (ajustado)
+    background: '#ffffff',
+    grid: '#e0e0e0',
+    cell: '#cccccc',
+    selected: '#000000',       // fundo preto quando seleciona
+    correct: '#00ff00',        // verde quando acerta
+    text: '#000000',
+    levelText: '#ffffff',
+    scoreText: '#ffffff',
+    wordText: '#ffffff'        // texto branco nas palavras a encontrar
+  },
+  {
+    // 4. Original
+    background: '#1a1a1a',
+    grid: '#2c2c2c',
+    cell: '#444',
+    selected: '#240046',
+    correct: '#000080',
+    text: 'white',
+    levelText: '#aaaaaa',
+    scoreText: '#aaaaaa',
+    wordText: 'white'
+  }
+];
+
+function applyTheme(theme) {
+document.body.style.background = theme.background;
+
+  document.body.style.color = theme.text;
+
+  const gridEl = document.querySelector('.grid');
+  if (gridEl) gridEl.style.backgroundColor = theme.grid;
+
+  document.querySelectorAll('.cell').forEach(cell => {
+    cell.style.backgroundColor = theme.cell;
+    cell.style.color = theme.text;
+  });
+
+  document.querySelectorAll('button').forEach(btn => {
+    btn.style.backgroundColor = theme.cell;
+    btn.style.color = theme.text;
+    btn.style.border = 'none';
+  });
+
+// Aplica o tema ao botão "Escolher wallpaper" (label)
+const wallpaperLabel = document.getElementById('wallpaperLabel');
+if (wallpaperLabel) {
+  wallpaperLabel.style.backgroundColor = theme.cell;
+  wallpaperLabel.style.color = theme.text;
+  wallpaperLabel.style.border = 'none';
+}
+
+  document.querySelectorAll('.word-list span').forEach(span => {
+    span.style.backgroundColor = theme.cell;
+    span.style.color = '#ffffff'; // força branco
+  });
+
+  const levelBox = document.getElementById('level');
+  if (levelBox) {
+    levelBox.style.backgroundColor = theme.selected;
+    levelBox.style.color = theme.levelText ?? theme.text;
+  }
+
+  const scoreBox = document.getElementById('score');
+  if (scoreBox) {
+    scoreBox.style.backgroundColor = theme.selected;
+    scoreBox.style.color = theme.scoreText ?? theme.text;
+  }
+
+  const oldStyle = document.getElementById('dynamic-theme-style');
+  if (oldStyle) oldStyle.remove();
+
+  const style = document.createElement('style');
+  style.id = 'dynamic-theme-style';
+  style.innerHTML = `
+    .selected {
+      background-color: ${theme.selected} !important;
+      color: ${theme.text === '#000000' ? '#ffffff' : theme.text} !important;
+    }
+
+    .correct {
+      background-color: ${theme.correct} !important;
+      color: #ffffff !important;
+    }
+
+    .word-list span {
+      color: #ffffff !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+
+const uploadInput = document.getElementById('uploadWallpaper');
+const wallpaperLabel = document.getElementById('wallpaperLabel');
+
+uploadInput.addEventListener('change', function () {
+  const file = this.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const imageUrl = e.target.result;
+
+      // aplica o fundo
+      document.body.style.backgroundImage = `url('${imageUrl}')`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.backgroundRepeat = 'no-repeat';
+
+      // salva no localStorage
+      localStorage.setItem('wallpaperTutyxs', imageUrl);
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Botão para alternar os temas
+colorThemeBtn.addEventListener('click', () => {
+  currentThemeIndex = (currentThemeIndex + 1) % colorThemes.length;
+  applyTheme(colorThemes[currentThemeIndex]);
+});
+
+    
+
+
+const playerBtn = document.getElementById('playerBtn');
+const playerContainer = document.getElementById('playerContainer');
+const seekBar = document.getElementById('seekBar');
+
+// Mostra ou esconde o player
+playerBtn.addEventListener('click', () => {
+  if (playerContainer.classList.contains('hidden')) {
+    playerContainer.classList.remove('hidden');
+
+    // Mostrar nome da música atual
+    const fileName = music.src.split('/').pop();
+    const nameWithoutExtension = decodeURIComponent(fileName).replace(/\.(mp3|wav|ogg)$/i, '');
+    document.getElementById('musicName').textContent = nameWithoutExtension;
+  } else {
+    playerContainer.classList.add('hidden');
+  }
+});
+// Atualiza barra conforme a música toca
+music.addEventListener('timeupdate', () => {
+  if (!isNaN(music.duration)) {
+    seekBar.max = music.duration;
+    seekBar.value = music.currentTime;
+  }
+});
+
+// Permite arrastar para buscar na música
+seekBar.addEventListener('input', () => {
+  music.currentTime = seekBar.value;
+});
+
+function voltar10s() {
+  music.currentTime = Math.max(0, music.currentTime - 10);
+}
+
+function avancar10s() {
+  music.currentTime = Math.min(music.duration, music.currentTime + 10);
+}
+
+
+    // Sons estão em arquivos musica1.mp3, musica2.mp3, musica3.mp3, success.mp3, fail.mp3, bolha.mp3
+    // Para testar som bolha: if (popSound) popSound.play();
+
+  </script>
+
+  <!-- Tela de Conclusão Profissional -->
+  <div id="winScreen" class="win-screen-overlay">
+    <div class="win-screen-content">
+      <h2>Parabéns!</h2>
+      <p id="winMessage">Você completou o Nível X e ganhou Y pontos!</p>
+      <button id="nextLevelBtn">Próximo Nível</button>
+      <button id="backToMenuBtn">Voltar ao Menu</button>
+      <div class="fireworks" id="fireworksContainer"></div>
+    </div>
+  </div>
+
+  <!-- Pop-up de boas-vindas -->
+	  <div id="welcomePopup" class="popup-overlay">
+    <div class="popup-content">
+      <button id="closePopup" class="close-btn">&times;</button>
+      <h2>Olá, Bem-vindo!</h2>
+      <p>Prepare-se para começar o jogo de caça-palavras!</p>
+    </div>
+  </div>
+
+</body>
+</html>
+</html>
