@@ -2329,6 +2329,14 @@ label.upload-btn {
     background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(56, 142, 60, 0.1) 100%);
 }
 
+.game-showcase-card.block-showcase {
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(255, 140, 0, 0.1) 100%); /* Cor Laranja/Amarelo para Block */
+    background-image: url('assets/images/blockblast.jpg');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay; /* Para misturar a imagem com o gradiente */
+}
+
 .game-card-header {
     padding: 1.5rem;
     display: flex;
