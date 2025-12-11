@@ -2331,7 +2331,7 @@ label.upload-btn {
 
 .game-showcase-card.block-showcase {
     background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(255, 140, 0, 0.1) 100%); /* Cor Laranja/Amarelo para Block */
-    background-image: url('assets/images/blockblast.jpg');
+    background-image: url('assets/images/block.png');
     background-size: cover;
     background-position: center;
     background-blend-mode: overlay; /* Para misturar a imagem com o gradiente */

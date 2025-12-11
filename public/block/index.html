@@ -5,6 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Block Blast - Tutyxs 3.0</title>
   <style>
+    /* Estilos da Tela de Carregamento */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #4a5fd8 0%, #2196F3 50%, #00bcd4 100%); /* Cor de fundo do jogo */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 3000; /* Acima de tudo */
+      transition: opacity 0.5s ease;
+    }
+
+    .loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loading-content {
+      text-align: center;
+    }
+
+    .loading-text {
+      font-size: 3rem;
+      color: white;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Animação de Pontinhos */
+    .dots {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+      animation: dot-animation 1.5s steps(4, end) infinite;
+      width: 1.5em; /* Garante que o espaço para os 3 pontos seja reservado */
+    }
+
+    @keyframes dot-animation {
+      0% {
+        width: 0;
+      }
+      25% {
+        width: 0.5em;
+      }
+      50% {
+        width: 1em;
+      }
+      75% {
+        width: 1.5em;
+      }
+      100% {
+        width: 1.5em;
+      }
+    }
+  </style>
+  <style>
     * {
       margin: 0;
       padding: 0;
@@ -492,7 +552,13 @@
     }
   </style>
 </head>
-<body>
+	<body>
+  <!-- Tela de Carregamento -->
+  <div id="loadingScreen" class="loading-screen">
+    <div class="loading-content">
+      <h1 class="loading-text">Carregando<span class="dots">...</span></h1>
+    </div>
+  </div>
   <button id="backToSiteBtn">
     <span class="arrow">←</span>
     <span class="text">Voltar</span>
@@ -561,11 +627,11 @@
   </div>
 
   <!-- Audio Elements -->
-  <audio id="audioWow" src="wow.mp3" preload="auto"></audio>
-  <audio id="audioAmazing" src="amazing.mp3" preload="auto"></audio>
-  <audio id="audioFantastic" src="fantastic.mp3" preload="auto"></audio>
-  <audio id="audioBackground" src="essemesmo.mp3" preload="auto" loop></audio>
-  <audio id="audioPop" src="pop.mp3" preload="auto"></audio>
+  <audio id="audioWow" src="../wow.mp3" preload="auto"></audio>
+  <audio id="audioAmazing" src="../amazing.mp3" preload="auto"></audio>
+  <audio id="audioFantastic" src="../fantastic.mp3" preload="auto"></audio>
+  <audio id="audioBackground" src="../essemesmo.mp3" preload="auto" loop></audio>
+  <audio id="audioPop" src="../pop.mp3" preload="auto"></audio>
 
   <script>
     function playSound(audioId) {
@@ -1029,6 +1095,14 @@
       document.getElementById('finalScore').textContent = gameState.score;
       document.getElementById('gameOverModal').classList.remove('hidden');
       toggleBackgroundMusic(false);
+      
+      // Salvar a pontuação máxima
+      if (window.opener && window.opener.submitBlockScore) {
+        window.opener.submitBlockScore(gameState.score);
+      } else if (window.submitBlockScore) {
+        // Caso o jogo esteja na mesma janela (menos provável, mas para segurança)
+        window.submitBlockScore(gameState.score);
+      }
     }
 
     function openSettings() {
@@ -1087,13 +1161,19 @@
 	        playSound('audioPop'); // Adicionado som de pop
 	        window.close();
 	        setTimeout(() => {
-	          window.location.href = '/index.html';
+	          window.location.href = '/';
 	        }, 100);
 	      });
 	    }
 
-    // Inicializar toggles quando o jogo começa
-    document.addEventListener('DOMContentLoaded', initToggles);
-  </script>
+	    // Inicializar toggles quando o jogo começa
+	    document.addEventListener('DOMContentLoaded', () => {
+        // Esconder a tela de carregamento após 2 segundos (simulando o carregamento)
+        setTimeout(() => {
+          document.getElementById('loadingScreen').classList.add('hidden');
+          initToggles();
+        }, 2000); // 2 segundos de delay
+      });
+	  </script>
 </body>
 </html>
