@@ -221,6 +221,31 @@
      * Integrar com o Jogo da Velha
      * Deve ser chamado após o fim de um jogo
      */
+    window.submitBlockScore = async function(score) {
+        try {
+            const result = await fetchWithAuth(`${API_URL}/api/scores/update-block-score`, {
+                method: 'POST',
+                body: JSON.stringify({ score })
+            });
+
+            // Limpar cache para forçar atualização
+            localStorage.removeItem(CACHE_KEY);
+            localStorage.removeItem(CACHE_KEY + '_time');
+
+            // Recarregar estatísticas
+            await loadUserStats();
+
+            return result;
+        } catch (error) {
+            console.error('Erro ao submeter pontuação do Block:', error);
+            throw error;
+        }
+    };
+
+    /**
+     * Integrar com o Jogo da Velha
+     * Deve ser chamado após o fim de um jogo
+     */
     window.submitTictactoeResult = async function(result) {
         try {
             await updateTictactoeResult(result);

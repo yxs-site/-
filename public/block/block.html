@@ -1029,6 +1029,14 @@
       document.getElementById('finalScore').textContent = gameState.score;
       document.getElementById('gameOverModal').classList.remove('hidden');
       toggleBackgroundMusic(false);
+      
+      // Salvar a pontuação máxima
+      if (window.opener && window.opener.submitBlockScore) {
+        window.opener.submitBlockScore(gameState.score);
+      } else if (window.submitBlockScore) {
+        // Caso o jogo esteja na mesma janela (menos provável, mas para segurança)
+        window.submitBlockScore(gameState.score);
+      }
     }
 
     function openSettings() {

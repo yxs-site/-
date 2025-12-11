@@ -26,6 +26,12 @@
             cacaScoreElement.textContent = (userStats.cacaPalavrasScore || 0).toLocaleString('pt-BR');
         }
 
+        // Atualizar Block - Pontuação Máxima
+        const blockScoreElement = document.getElementById('profile-block-score');
+        if (blockScoreElement) {
+            blockScoreElement.textContent = (userStats.blockHighScore || 0).toLocaleString('pt-BR');
+        }
+
         // Atualizar Jogo da Velha - Vitórias
         const winsElement = document.getElementById('profile-tictactoe-wins');
         if (winsElement) {
