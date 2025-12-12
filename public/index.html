@@ -879,6 +879,32 @@
         document.addEventListener('click', startPlayback);
         document.addEventListener('touchstart', startPlayback);
     </script>
+    <audio id="background-music" src="les.mp3" loop></audio>
+    <script>
+        const audio = document.getElementById('background-music');
+        audio.volume = 0.5; // 50% volume
+
+        // Função para tentar iniciar a reprodução
+        function startPlayback() {
+            audio.play().then(() => {
+                console.log('Música iniciada com sucesso.');
+                // Remove o listener após o sucesso
+                document.removeEventListener('click', startPlayback);
+                document.removeEventListener('touchstart', startPlayback);
+            }).catch(error => {
+                // A reprodução falhou (provavelmente devido à política de autoplay)
+                console.log('A reprodução automática foi bloqueada. Aguardando interação do usuário.');
+                // Mantém os listeners para tentar novamente na próxima interação
+            });
+        }
+
+        // Tenta iniciar a reprodução imediatamente
+        startPlayback();
+
+        // Adiciona listeners para tentar iniciar a reprodução na primeira interação do usuário
+        document.addEventListener('click', startPlayback);
+        document.addEventListener('touchstart', startPlayback);
+    </script>
 </body>
 </html>
                                 
