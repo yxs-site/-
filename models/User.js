@@ -53,7 +53,26 @@ const UserSchema = new mongoose.Schema({
     },
     // Campo para recuperação de senha
     resetToken: String,
-    resetTokenExpiry: Date
+    resetTokenExpiry: Date,
+    // Campos para amizade e chat
+    friends: [
+        {
+            userId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            addedAt: {
+                type: Date,
+                default: Date.now
+            }
+        }
+    ],
+    blockedUsers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ]
 }, {
     timestamps: true // Adiciona createdAt e updatedAt
 });

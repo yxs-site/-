@@ -62,6 +62,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Rotas de API
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/scores', require('./routes/scoreRoutes'));
+app.use('/api/chat', require('./routes/chatRoutes'));
 
 // Rota de fallback para o frontend (SPA - Single Page Application)
 app.get('/', (req, res) => {
@@ -269,6 +270,51 @@ io.on('connection', (socket) => {
     socket.on('user-disconnected', (userId) => {
         removeUserSocket(userId, socket.id);
         console.log(`Usuário ${userId} desconectado do socket ${socket.id}`);
+    });
+
+    // ===== LÓGICA DE CHAT EM TEMPO REAL =====
+    
+    // Evento para enviar mensagem em tempo real
+    socket.on('send-message', async (data) => {
+        try {
+            const { receiverId, content, senderId } = data;
+            
+            // Salvar mensagem no banco de dados
+            const Message = require('./models/Message');
+            const message = new Message({
+                senderId: senderId,
+                receiverId: receiverId,
+                content: content
+            });
+            await message.save();
+            
+            // Emitir a mensagem para o receptor em tempo real
+            io.emit('receive-message', {
+                _id: message._id,
+                senderId: senderId,
+                receiverId: receiverId,
+                content: content,
+                timestamp: message.timestamp,
+                read: false
+            });
+            
+            console.log(`Mensagem enviada de ${senderId} para ${receiverId}`);
+        } catch (error) {
+            console.error('Erro ao enviar mensagem:', error);
+            socket.emit('error', { message: 'Erro ao enviar mensagem' });
+        }
+    });
+    
+    // Evento para marcar mensagem como lida
+    socket.on('mark-as-read', async (data) => {
+        try {
+            const { messageId } = data;
+            const Message = require('./models/Message');
+            await Message.findByIdAndUpdate(messageId, { read: true });
+            io.emit('message-read', { messageId: messageId });
+        } catch (error) {
+            console.error('Erro ao marcar mensagem como lida:', error);
+        }
     });
 });
 

@@ -823,6 +823,86 @@
             </div>
 
             <!-- Página de Configurações -->
+            <!-- Página de Chat -->
+            <div id="chat-page" class="page">
+                <div class="chat-container">
+                    <!-- Lista de Amigos -->
+                    <div class="chat-sidebar">
+                        <div class="chat-header">
+                            <h2>Mensagens</h2>
+                            <button id="btn-add-friend" class="btn-add-friend" title="Adicionar Amigo">
+                                <i class="fas fa-user-plus"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Barra de Pesquisa -->
+                        <div class="chat-search">
+                            <input type="text" id="search-friends" class="search-input" placeholder="Pesquisar amigos...">
+                        </div>
+                        
+                        <!-- Lista de Amigos -->
+                        <div class="friends-list" id="friends-list">
+                            <!-- Os amigos serão carregados aqui via JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Área de Chat -->
+                    <div class="chat-main">
+                        <div id="chat-empty" class="chat-empty">
+                            <i class="fas fa-comments"></i>
+                            <p>Selecione um amigo para começar a conversar</p>
+                        </div>
+                        
+                        <div id="chat-window" class="chat-window" style="display: none;">
+                            <!-- Header do Chat -->
+                            <div class="chat-window-header">
+                                <div class="chat-friend-info">
+                                    <img id="chat-friend-avatar" src="" alt="Avatar" class="chat-friend-avatar">
+                                    <div class="chat-friend-details">
+                                        <h3 id="chat-friend-name"></h3>
+                                        <p id="chat-friend-status">Online</p>
+                                    </div>
+                                </div>
+                                <button id="btn-close-chat" class="btn-close-chat">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Área de Mensagens -->
+                            <div class="messages-area" id="messages-area">
+                                <!-- As mensagens serão carregadas aqui via JavaScript -->
+                            </div>
+                            
+                            <!-- Área de Input de Mensagem -->
+                            <div class="message-input-area">
+                                <input type="text" id="message-input" class="message-input" placeholder="Digite uma mensagem...">
+                                <button id="btn-send-message" class="btn-send-message">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal de Pesquisa de Usuários -->
+            <div id="search-users-modal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Adicionar Amigo</h2>
+                        <button class="btn-close-modal" id="btn-close-search-modal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="search-users-input" class="search-input" placeholder="Pesquisar por nome ou email...">
+                        <div class="search-results" id="search-results">
+                            <!-- Os resultados serão carregados aqui via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="configuracoes-page" class="page">
                 <div class="page-header">
                     <h1>Configurações</h1>
@@ -867,6 +947,7 @@
     <script src="home-script.js"></script>
     <script src="profile-stats-script.js"></script>
     <script src="tictactoe-profile-integration.js"></script>
+    <script src="chat-script.js"></script>
     <audio id="background-music" src="les.mp3" loop></audio>
     <script>
         const audio = document.getElementById('background-music');
