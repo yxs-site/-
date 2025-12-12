@@ -66,6 +66,26 @@
 
   const body = document.body;
 
+  /* -----------------------
+     Music Control
+  ------------------------*/
+  const backgroundMusic = $("background-music") || null;
+
+  function startMusic() {
+    if (!backgroundMusic) return;
+    backgroundMusic.volume = 0.5; // Volume 50%
+    backgroundMusic.play().catch(error => {
+      console.warn("Autoplay blocked. Waiting for user interaction.", error);
+    });
+  }
+
+  function stopMusic() {
+    if (backgroundMusic) {
+      backgroundMusic.pause();
+      backgroundMusic.currentTime = 0;
+    }
+  }
+
   const loginIdentifierInput = $("login-identifier") || null;
   const rememberMeCheckbox = $("remember-me") || null;
 
@@ -197,6 +217,16 @@
     // hide/show with guards
     if (hideScreen && hideScreen.classList) hideScreen.classList.remove("active");
     if (showScreen && showScreen.classList) showScreen.classList.add("active");
+
+    // Lógica de controle de música
+    const isWelcomeScreen = showScreen && showScreen.id === "welcome-splash";
+    const isGameScreen = showScreen && (showScreen.id === "home-page" || showScreen.id === "profile-page"); // Assumindo que 'home-page' é a tela pós-login/registro onde os jogos são acessados
+
+    if (isWelcomeScreen) {
+      startMusic();
+    } else if (isGameScreen) {
+      stopMusic();
+    }
   }
 
   function logout() {
@@ -1320,8 +1350,13 @@
     });
   });
 
-  // Export for debugging (optional)
-  window.__App = {
+	  // Adiciona listeners para tentar iniciar a reprodução na primeira interação do usuário
+	  // Isso é necessário para contornar a política de autoplay dos navegadores
+	  document.addEventListener('click', startMusic, { once: true });
+	  document.addEventListener('touchstart', startMusic, { once: true });
+
+	  // Export for debugging (optional)
+	  window.__App = {
     logout,
     loadProfileData,
     applyTheme,
