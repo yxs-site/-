@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yxs-site-cache-v1';
+const CACHE_NAME = 'yxs-site-cache-v2';
 const urlsToCache = [
   '/',
   '/index.html',
