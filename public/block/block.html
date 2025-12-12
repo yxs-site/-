@@ -697,6 +697,7 @@ h1 {
 	  <audio id="audioBackground1" src="musica1.mp3" preload="auto"></audio>
 	  <audio id="audioBackground2" src="musica2.mp3" preload="auto"></audio>
 	  <audio id="audioBackground3" src="musica3.mp3" preload="auto"></audio>
+  <audio id="audioBackground4" src="../Les.mp3" preload="auto"></audio>
   <audio id="audioPop" src="pop.mp3" preload="auto"></audio>
 
 	  <script>
@@ -822,12 +823,13 @@ h1 {
       }
     }
 
-		    const MUSIC_LIST = [
-		      { name: "Champagne Coast", file: "musica1.mp3" },
-		      { name: "Dreamin", file: "musica2.mp3" },
-		      { name: "Get You", file: "musica3.mp3" }
-		    ];
-		    let currentMusicIndex = 0; // Índice 0 para Champagne Coast
+const MUSIC_LIST = [
+      { name: "Champagne Coast", file: "musica1.mp3" },
+      { name: "Dreamin", file: "musica2.mp3" },
+      { name: "Get You", file: "musica3.mp3" },
+      { name: "Les", file: "../Les.mp3" } // Nova música adicionada
+    ];
+		    let currentMusicIndex = 3; // Índice 3 para Les.mp3 (a nova música)
 		    const MAX_MUSIC_INDEX = MUSIC_LIST.length - 1;
 	
 		    function getAudioElement(index) {
@@ -862,22 +864,22 @@ h1 {
 		    function toggleBackgroundMusic(play) {
 		      if (play && gameState.soundEnabled) {
 		        const currentAudio = getAudioElement(currentMusicIndex);
-		        if (currentAudio && currentAudio.paused) {
-		          currentAudio.volume = 0.6;
-		          currentAudio.play().catch(e => console.error("Erro ao reproduzir música de fundo:", e));
-		          currentAudio.onended = playNextMusic;
-
-		        } else if (!currentAudio) {
-		          // Inicia a primeira música se nenhuma estiver tocando
-		          currentMusicIndex = 0;
-		          const firstAudio = getAudioElement(currentMusicIndex);
-		          if (firstAudio) {
-		            firstAudio.volume = 0.6;
-		            firstAudio.play().catch(e => console.error("Erro ao reproduzir música de fundo:", e));
-		            firstAudio.onended = playNextMusic;
-
-		          }
-		        }
+		        if (currentAudio && currentAudio.pif (currentAudio) {
+			        currentAudio.volume = 0.5; // Volume ajustado para 50%
+			        currentAudio.play().catch(e => console.error("Erro ao reproduzir música de fundo:", e));
+			        currentAudio.onended = playNextMusic;
+	
+			      } else if (!currentAudio) {
+			        // Inicia a música 'Les' se nenhuma estiver tocando
+			        currentMusicIndex = 3; // Começa com a música 'Les'
+			        const firstAudio = getAudioElement(currentMusicIndex);
+			        if (firstAudio) {
+			          firstAudio.volume = 0.5; // Volume ajustado para 50%
+			          firstAudio.play().catch(e => console.error("Erro ao reproduzir música de fundo:", e));
+			          firstAudio.onended = playNextMusic;
+	
+			        }
+			      }
 		      } else {
 		        // Pausa todas as músicas
 		        for (let i = 0; i < MUSIC_LIST.length; i++) {
@@ -1539,7 +1541,11 @@ if (clearedCount > 0) {
 	    }
 
     // Inicializar toggles quando o jogo começa
-    document.addEventListener('DOMContentLoaded', initToggles);
+    document.addEventListener('DOMContentLoaded', () => {
+	      initToggles();
+	      // Inicia a música de fundo na tela inicial (Menu Principal)
+	      toggleBackgroundMusic(true);
+	    });
   </script>
 </body>
 </html>
